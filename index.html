@@ -3,22 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>KVLS Tikker BigScreen</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/fonts.css">
 </head>
 <body>
-    <div class="background"></div>
-    <div class="content">
-        <div id="header">
-            <div id="spotify"></div>
-            <div id="tikker_status"></div>
+<div class="bg-image"></div>
+<div class="bg-text">
+    <div class="header">
+        <div class="logo">
+            <img src="img/logo-dark.png" height="160px" id="logo">
         </div>
-        <div id="content"></div>
-            <div id="tikker-offline">
-                <p id="large">Tikker is offline</p>
-                <p id="small">er wordt geprobeerd verbinding te maken...</p>
+        <div class="logo-title">
+            <div class="tikker-title">Tikker</div>
+            <div class="tikker-subtitle">BigScreen</div>
+        </div>
+        <div class="spotify"></div>
+        <div class="tikker-status">
+            <div class="server-status">
+                <span class="status-dot pulsation" id="status-dot" style="background-color: green;"></span>
+                <span style="color: green; vertical-align: middle" id="status-text">  Tikker online</span>
             </div>
-        <div id="footer">
+            <div class="clock">
+                <div id="clock">00:00</div>
+            </div>
         </div>
     </div>
+    <div class="content"></div>
+    <div class="tikker-offline">
+        <p class="large">Tikker is offline</p>
+        <p class="small">er wordt geprobeerd verbinding te maken...</p>
+    </div>
+    <div class="footer">
+    </div>
+</div>
 </body>
 </html>
