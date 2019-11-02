@@ -6,7 +6,8 @@ body, html {
     margin: 0;
     padding: 0;
     font-family: standardtext;
-    color: white;
+    color: rgb(200, 200, 200);
+    text-shadow: 0 0 1px grey;
 }
 
 * {
@@ -16,6 +17,7 @@ body, html {
 .bg-image {
     /* The image used */
     background-image: url("../ABGT-Twitch-Square.png");
+    opacity: 0.5;
 
     /* Add the blur effect */
     filter: blur(10px);
@@ -26,13 +28,40 @@ body, html {
     width: 100vw;
 
     /*margin-top: -10vh;
-    margin-bottom: -10vh;
+    margin-bottom: 0vh;
     margin-left: -10vw;
-    margin-right: -10vw;*/
+    margin-right: 0vw;*/
 
     /* Center and scale the image nicely*/
     background-position: center center;
     background-size: cover;
+
+    /*-webkit-animation-name: move-wallpaper;
+    -webkit-animation-duration: 50s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    animation-name: move-wallpaper;
+    animation-duration: 50s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;*/
+}
+
+@keyframes move-wallpaper {
+    0%     {
+        margin: -5vh 0vw -5vh -10vw;
+    }
+    25%     {
+        margin: 0vh -5vw -10vh -5vw;
+    }
+    50%     {
+        margin: -5vh -10vw -5vh 0vw;
+    }
+    75%     {
+        margin: -10vh -5vw 0vh -5vw;
+    }
+    100%     {
+        margin: -5vh 0vw -5vh -10vw;
+    }
 }
 
 .bg-text {
@@ -45,8 +74,20 @@ body, html {
     z-index: 2;
 }
 
+.screen-left {
+    width: 480px;
+    height: 1080px;
+    float: left;
+    border-right: 4px solid black;
+}
+
+.screen-right {
+    width: 1436px;
+    float: right;
+}
+
 .header {
-    height: 200px;
+    height: 140px;
     padding: 20px;
 }
 
@@ -57,10 +98,10 @@ body, html {
 
 #logo {
     -webkit-animation-name: rotate-logo; /* Safari 4.0 - 8.0 */
-    -webkit-animation-duration: 15s; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 45s; /* Safari 4.0 - 8.0 */
     -webkit-animation-iteration-count: infinite;
     animation-name: rotate-logo;
-    animation-duration: 15s;
+    animation-duration: 45s;
     animation-iteration-count: infinite;
 }
 
@@ -70,10 +111,6 @@ body, html {
     50%     {transform: rotateY(180deg)}
     95%     {transform: rotateY(180deg)}
     100%    {transform: rotateY(0)}
-}
-
-.content {
-
 }
 
 img {
@@ -91,30 +128,29 @@ img {
 .tikker-title {
     font-family: title;
     vertical-align: center;
-    font-size: 100px;
+    font-size: 80px;
 }
 
 .tikker-subtitle {
     font-family: subtitle;
     vertical-align: center;
-    font-size: 40px;
-}
-
-.tikker-status {
-    float: right;
-    text-align: right;
-}
-
-.server-status {
     font-size: 30px;
 }
 
+.tikker-status {
+}
+
+.server-status {
+    font-size: 20px;
+}
+
 .status-dot {
-    height: 20px;
-    width: 20px;
+    height: 15px;
+    width: 15px;
     border-radius: 50%;
     display: inline-block;
-    margin-top: 20px;
+    margin-top: 0px;
+    margin-left: 10px;
     margin-right: 7px;
 }
 
@@ -131,8 +167,44 @@ img {
     100% {opacity: 1.0;}
 }
 
+.stats-table {
+    width: 100%;
+    padding: 25px;
+    font-size: 24px;
+}
+
+.stats-cell-value {
+    text-align: center;
+    padding: 10px 0px 10px 0px;
+}
+
+.right-header {
+    height: 100px;
+}
+
+.last-tikked {
+    float: left;
+    margin: 20px;
+}
+
 .clock {
     font-size: 60px;
+    text-align: right;
+}
+
+.content {
+    background-color: rgba(0, 0, 0, 0.5);
+    /*border: 3px solid #f1f1f1;*/
+    border: 3px solid #f1f1f1;
+    color: red;
+    font-size: 30px;
+    margin: 40px 80px 50px;
+    padding: 50px;
+    width: 1176px;
+    height: 540px;
+    text-align: center;
+    vertical-align: center;
+
 }
 
 /* Position text in the middle of the page/image */

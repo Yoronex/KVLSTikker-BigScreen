@@ -5,35 +5,131 @@
     <title>KVLS Tikker BigScreen</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <link rel="stylesheet" type="text/css" href="css/fonts.css">
+    <link rel="stylesheet" type="text/css" href="css/music-player.css">
+    <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="js/header.js"></script>
 </head>
-<body>
+<body onload="startFunctions()">
 <div class="bg-image"></div>
 <div class="bg-text">
-    <div class="header">
-        <div class="logo">
-            <img src="img/logo-dark.png" height="160px" id="logo">
+    <div class="screen-left">
+        <div class="header">
+            <div class="logo">
+                <img src="img/logo-dark.png" height="160px" id="logo">
+            </div>
+            <div class="logo-title">
+                <div class="tikker-title">Tikker</div>
+                <div class="tikker-subtitle">BigScreen</div>
+                <div class="tikker-status">
+                    <div class="server-status">
+                        <span class="status-dot pulsation" id="status-dot" style="background-color: green;"></span>
+                        <span style="color: green; vertical-align: middle" id="status-text">  Tikker online</span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="logo-title">
-            <div class="tikker-title">Tikker</div>
-            <div class="tikker-subtitle">BigScreen</div>
+        <div stats-list>
+            <table class="stats-table">
+                <tr>
+                    <th>Aantal</th>
+                    <th>Vandaag</th>
+                    <th>Altijd</th>
+                </tr>
+                <tr class="stats-row">
+                    <td>Producten in Tikker</td>
+                    <td class="stats-cell-value">18</td>
+                    <td class="stats-cell-value">18</td>
+                </tr>
+                <tr class="stats-row">
+                    <td>Gebruikers in Tikker</td>
+                    <td class="stats-cell-value">14</td>
+                    <td class="stats-cell-value">14</td>
+                </tr>
+                <tr class="stats-row">
+                    <td>Biertjes gedronken</td>
+                    <td class="stats-cell-value">17</td>
+                    <td class="stats-cell-value">36</td>
+                </tr>
+                <tr class="stats-row">
+                    <td>Mixjes gemaakt</td>
+                    <td class="stats-cell-value">3</td>
+                    <td class="stats-cell-value">8</td>
+                </tr>
+                <tr class="stats-row">
+                    <td>Shotjes gedaan</td>
+                    <td class="stats-cell-value">6</td>
+                    <td class="stats-cell-value">11</td>
+                </tr>
+                <tr class="stats-row">
+                    <td>Drankjes afgetikt</td>
+                    <td class="stats-cell-value">12</td>
+                    <td class="stats-cell-value">38</td>
+                </tr>
+                <tr class="stats-row">
+                    <td>Rondjes gegeven</td>
+                    <td class="stats-cell-value">2</td>
+                    <td class="stats-cell-value">2</td>
+                </tr>
+                <tr class="stats-row">
+                    <td>Euro's in de bar</td>
+                    <td class="stats-cell-value">€420,69</td>
+                    <td class="stats-cell-value">€420,69</td>
+                </tr>
+            </table>
         </div>
-        <div class="spotify"></div>
-        <div class="tikker-status">
-            <div class="server-status">
-                <span class="status-dot pulsation" id="status-dot" style="background-color: green;"></span>
-                <span style="color: green; vertical-align: middle" id="status-text">  Tikker online</span>
+    </div>
+    <div class="screen-right">
+        <div class="right-header">
+            <div class="last-tikked">
+                Niemand!
             </div>
             <div class="clock">
                 <div id="clock">00:00</div>
             </div>
         </div>
-    </div>
-    <div class="content"></div>
-    <div class="tikker-offline">
-        <p class="large">Tikker is offline</p>
-        <p class="small">er wordt geprobeerd verbinding te maken...</p>
-    </div>
-    <div class="footer">
+        <div class="content">
+            <div class="tikker-offline"><br><br><br><br><br>
+                <p class="large">Tikker is offline</p>
+                <p class="small">Er wordt geprobeerd verbinding te maken...</p>
+            </div>
+        </div>
+        <div class="music-player">
+            <table class="music-player-layout">
+                <tr>
+                    <td rowspan="3">
+                        <div class="album-cover">
+                            <img id="album-cover" src="ABGT-Twitch-Square.png">
+                        </div>
+                    </td>
+                    <td height="40%">
+                        <div class="track-title">
+                            Solarize (ABGT 350)
+                        </div>
+                    </td>
+                    <td rowspan="2">
+                        <div class="spotify-user-metadata">
+                            Roytjuh99 <img id="spotify-logo" src="img/spotify_white.png ">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td height="30%">
+                        <div class="track-artist">
+                            Above & Beyond
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="track-progress">
+                        <span id="track-current-time">1:00</span>
+                        <div id="track-progress-bar">
+                            <div></div>
+                        </div>
+                        <span id="track-end-time">4:00</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>
 </body>
