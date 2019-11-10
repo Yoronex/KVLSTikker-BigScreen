@@ -16,12 +16,12 @@ body, html {
 
 .bg-image {
     /* The image used */
-    background-image: url("../ABGT-Twitch-Square.png");
+    /*background-image: url("../ABGT-Twitch-Square.png");*/
     opacity: 0.5;
 
     /* Add the blur effect */
-    filter: blur(10px);
-    -webkit-filter: blur(10px);
+    filter: blur(20px);
+    -webkit-filter: blur(20px);
 
     /* Full height */
     height: 100vh;
@@ -44,6 +44,14 @@ body, html {
     animation-duration: 50s;
     animation-iteration-count: infinite;
     animation-timing-function: linear;*/
+}
+
+.img-bot {
+    background-image: url("../ABGT-Twitch-Square.png");
+}
+
+.img-top {
+    background-image: url("../test_background.jpg");;
 }
 
 @keyframes move-wallpaper {
@@ -184,27 +192,46 @@ img {
 
 .last-tikked {
     float: left;
-    margin: 20px;
+    margin: 10px 30px;
+    width: 1200px;
+    height: 4rem;
+    font-size: 28px;
+    /*box-shadow: 12px 0 15px -4px rgba(255, 255, 255, 0.8), -12px 0 8px -4px rgba(255, 255, 255, 0.8);*/
+}
+
+.marq {
+    font-size: 28px;
 }
 
 .clock {
     font-size: 60px;
     text-align: right;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .content {
     background-color: rgba(0, 0, 0, 0.5);
     /*border: 3px solid #f1f1f1;*/
     border: 3px solid #f1f1f1;
+    margin: 40px 80px 50px;
+    padding: 0px;
+    width: 1276px;
+    height: 640px;
+    text-align: center;
+}
+
+.tikker-offline {
     color: red;
     font-size: 30px;
-    margin: 40px 80px 50px;
-    padding: 50px;
-    width: 1176px;
-    height: 540px;
-    text-align: center;
-    vertical-align: center;
+}
 
+.graph {
+    margin: 25px 88px;
+    width: 1000px !important;
+    height: 520px !important;
 }
 
 /* Position text in the middle of the page/image */

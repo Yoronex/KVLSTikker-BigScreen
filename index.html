@@ -6,11 +6,17 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <link rel="stylesheet" type="text/css" href="css/fonts.css">
     <link rel="stylesheet" type="text/css" href="css/music-player.css">
-    <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="js/header.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/Chart.css">
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/socket.io.js"></script>
+    <script src="js/Chart.bundle.min.js"></script>
+    <script src="js/header.js"></script>
+    <script src="js/conn.js"></script>
+    <script src="js/carousel.js"></script>
 </head>
 <body onload="startFunctions()">
-<div class="bg-image"></div>
+<div class="bg-image img-top" id="global-background"></div>
+<div class="bg-image img-bot" id="global-background-bottom"></div>
 <div class="bg-text">
     <div class="screen-left">
         <div class="header">
@@ -28,7 +34,8 @@
                 </div>
             </div>
         </div>
-        <div stats-list>
+        <button onclick="testMarquee()">Test Transaction</button>
+        <div class="stats-list">
             <table class="stats-table">
                 <tr>
                     <th>Aantal</th>
@@ -80,18 +87,24 @@
     </div>
     <div class="screen-right">
         <div class="right-header">
-            <div class="last-tikked">
-                Niemand!
+            <div class="last-tikked" id="marquee">
             </div>
             <div class="clock">
-                <div id="clock">00:00</div>
+                <div id="clock">
+                    <span id="clock-hour" style="display: inline-block; margin-right: -8px;"></span>
+                    <span id="clock-middle" style="display: inline-block; width: 0.7rem;"></span>
+                    <span id="clock-minute" style="display: inline-block; margin-left: -8px;"></span>
+                </div>
             </div>
         </div>
-        <div class="content">
+        <div class="content" id="content">
+            <button id="testsocket">Test Socket</button>
+            <div id="contentblock"></div>
             <div class="tikker-offline"><br><br><br><br><br>
                 <p class="large">Tikker is offline</p>
                 <p class="small">Er wordt geprobeerd verbinding te maken...</p>
             </div>
+
         </div>
         <div class="music-player">
             <table class="music-player-layout">
@@ -102,11 +115,11 @@
                         </div>
                     </td>
                     <td height="40%">
-                        <div class="track-title">
+                        <div class="track-title" id="track-title">
                             Solarize (ABGT 350)
                         </div>
                     </td>
-                    <td rowspan="2">
+                    <td rowspan="2" style="vertical-align: bottom">
                         <div class="spotify-user-metadata">
                             Roytjuh99 <img id="spotify-logo" src="img/spotify_white.png ">
                         </div>
@@ -114,7 +127,7 @@
                 </tr>
                 <tr>
                     <td height="30%">
-                        <div class="track-artist">
+                        <div class="track-artist" id="track-artist">
                             Above & Beyond
                         </div>
                     </td>
@@ -123,7 +136,7 @@
                     <td colspan="2" class="track-progress">
                         <span id="track-current-time">1:00</span>
                         <div id="track-progress-bar">
-                            <div></div>
+                            <div id="track-progress-bar-inner"></div>
                         </div>
                         <span id="track-end-time">4:00</span>
                     </td>
