@@ -40,6 +40,11 @@ socket.on('spotify update', function(msg) {
     }
 });
 
+socket.on('transaction', function(msg) {
+    console.log("Received transaction!")
+    queueMarquee(msg.message)
+});
+
 function initSocketIO() {
 
 
