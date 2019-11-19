@@ -131,12 +131,10 @@ function spotifyprogress() {
         $('.measure-text-width').find('span:last').remove();
         console.log("width: " + width);
         return width;*/
-        console.log("text used: " + $(this).text());
         var calc = '<span class="marq" style="display:none">' + $(this).text() + '</span>';
         $('body').append(calc);
         var width = $('body').find('span:last').width();
         $('body').find('span:last').remove();
-        console.log("width: " + width);
         return width;
     };
 
@@ -205,7 +203,6 @@ let marqueeWorking = false;
 function queueMarquee(message) {
     queue.push(message);
     if (marqueeWorking === false) {
-        console.log("Start marquee!");
         popQueueMarquee()
     }
 }
@@ -226,11 +223,20 @@ function popQueueMarquee() {
     $('.marq').marquee({ count: 1, speed: 1 }).done(function() {
         document.getElementById("marquee").innerHTML = "";
         if (queue.length > 0) {
-            console.log("Start again!");
             popQueueMarquee()
         } else {
-            console.log("Stop!");
             marqueeWorking = false;
         }
     });
+}
+
+function updateDailyStats(daily, max) {
+    let table = document.getElementById('stats-table');
+    for (let i = 1; i < table.rows.length; i++) {
+        const row = table.rows[i];
+        const id = row.id.substring(10, row.id.length);
+        //console.log("done")
+        row.cells[1].innerHTML = daily[id];
+        row.cells[2].innerHTML = max["max-stats-" + id];
+    }
 }

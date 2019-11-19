@@ -41,25 +41,30 @@ socket.on('spotify update', function(msg) {
 });
 
 socket.on('transaction', function(msg) {
-    console.log("Received transaction!")
-    queueMarquee(msg.message)
+    queueMarquee(msg.message);
 });
 
-function initSocketIO() {
+socket.on('slide_data', function(msg) {
+    //console.log("Recv slide data for " + msg.name);
+    slides[msg.name].data = msg.data
+});
 
+socket.on('slide_interrupt', function(msg) {
+    msg = msg.message;
+    //console.log("Recei interrupt for " + msg.name);
+    slides[msg.name].data = msg.data;
+    interruptCarousel(slides[msg.name])
+});
 
-    //socket.on('connect', on_connect());
-    socket.on('event', on_event());
-}
+socket.on('stats', function(msg) {
+    console.log("Received stats update");
+    console.log(msg);
+    updateDailyStats(msg.daily, msg.max);
+});
 
-function on_connect() {
-    var content = document.getElementById('contentblock');
-    content.innerHTML = "Connected to SocketIO!"
-}
-
-function on_event() {
-    var content = document.getElementById('contentblock');
-    content.innerHTML = ""
+function updateSlideData(name) {
+    //console.log("send slide data for " + name);
+    socket.emit('slide_data', {"name": name})
 }
 
 function spotify_update() {

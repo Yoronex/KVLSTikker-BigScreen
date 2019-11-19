@@ -5,13 +5,17 @@ body, html {
     overflow: hidden;
     margin: 0;
     padding: 0;
-    font-family: standardtext;
+    font-family: standardtext, serif;
     color: rgb(200, 200, 200);
     text-shadow: 0 0 1px grey;
 }
 
 * {
     /*box-sizing: border-box;*/
+}
+
+h1 {
+    font-size: 52px;
 }
 
 .bg-image {
@@ -215,12 +219,13 @@ img {
 .content {
     background-color: rgba(0, 0, 0, 0.5);
     /*border: 3px solid #f1f1f1;*/
-    border: 3px solid #f1f1f1;
+    /*border: 3px solid #f1f1f1;*/
     margin: 40px 80px 50px;
     padding: 0px;
     width: 1276px;
     height: 640px;
     text-align: center;
+    overflow: hidden;
 }
 
 .tikker-offline {
@@ -232,6 +237,11 @@ img {
     margin: 25px 88px;
     width: 1000px !important;
     height: 520px !important;
+}
+
+.pricelist {
+    height: 500px;
+    width: 100%
 }
 
 /* Position text in the middle of the page/image */
