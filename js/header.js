@@ -120,6 +120,33 @@ function spotifyprogress() {
     var t = setTimeout(spotifyprogress, 100);
 }
 
+let backgroundSwitch;
+let busy = false;
+
+function updateCover(cover) {
+    let front_background = document.getElementById('global-background-top');
+    let back_background = document.getElementById('global-background-back');
+    let front_cover = document.getElementById('album-cover-top');
+    let back_cover = document.getElementById('album-cover-back');
+    back_background.style.backgroundImage = "url(" + cover + ")";
+    back_cover.src = cover;
+    front_background.style.opacity = '0';
+    front_cover.style.opacity = '0';
+    backgroundSwitch = setTimeout(updateCoverPt2, 1000);
+}
+
+function updateCoverPt2() {
+    let front_background = document.getElementById('global-background-top');
+    let back_background = document.getElementById('global-background-back');
+    let front_cover = document.getElementById('album-cover-top');
+    let back_cover = document.getElementById('album-cover-back');
+    front_background.style.backgroundImage = back_background.style.backgroundImage;
+    front_cover.src = back_cover.src;
+    front_background.style.opacity = '1';
+    front_cover.style.opacity = '1';
+    backgroundSwitch = null;
+}
+
 (function($) {
     $.fn.textWidth = function(){
         /*var text = $(this).text();
@@ -243,4 +270,9 @@ function updateDailyStats(daily, max) {
 function hideLoading() {
     console.log("init finished, hide loading");
     document.getElementById('loading-screen').style.opacity = '0'
+    setTimeout(hideLoadingInvis, 1000)
+}
+
+function hideLoadingInvis() {
+    document.getElementById('loading-screen').style.visibility = 'hidden';
 }

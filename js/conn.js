@@ -19,6 +19,7 @@ function updateSpotify(msg) {
     const defaultTitle = "";
     const defaultArtist = "";
     if (msg['logged in'] === true && msg.data !== null) {
+        document.getElementById('spotify-user').innerHTML = msg['username'];
         currentSpotifyTrackEnd = new Date();
         currentSpotifyTrackEnd = new Date(currentSpotifyTrackEnd.getTime() + msg.data.item['duration_ms'] - msg.data['progress_ms']);
         currentSpotifyTrackPlaying = msg.data['is_playing'];
@@ -34,8 +35,9 @@ function updateSpotify(msg) {
             $('#track-artist').html(trackArtists.substring(0, trackArtists.length - 2));
 
             let cover = tikkerUrl + "/static/covers/" + msg.data.item.album.id + ".jpg";
-            document.getElementById("global-background").style.backgroundImage = "url(" + cover + ")";
-            document.getElementById("album-cover").src = cover;
+            /*document.getElementById("global-background-top").style.backgroundImage = "url(" + cover + ")";
+            document.getElementById("album-cover-top").src = cover;*/
+            updateCover(cover);
         }
     } else {
         $('#track-title').html(defaultTitle);
@@ -66,7 +68,7 @@ socket.on('init', function(msg) {
     runCarouselObj();
     spotify_send_update();
     spotifyprogress();
-    hideLoading();
+    setTimeout(hideLoading, 1500);
 });
 
 socket.on('stats', function(msg) {

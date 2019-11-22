@@ -15,8 +15,9 @@
     <script src="js/carousel.js"></script>
 </head>
 <body onload="startFunctions()">
-<div class="bg-image img-top" id="global-background"></div>
-<div class="bg-image img-bot" id="global-background-bottom"></div>
+<div class="bg-image-black"></div>
+<div class="bg-image img-top" id="global-background-top"></div>
+<div class="bg-image img-bot" id="global-background-back"></div>
 <div class="bg-text">
     <div class="screen-left">
         <div class="header">
@@ -111,7 +112,8 @@
                 <tr>
                     <td rowspan="3">
                         <div class="album-cover">
-                            <img id="album-cover" src="ABGT-Twitch-Square.png">
+                            <img id="album-cover-top">
+                            <img id="album-cover-back">
                         </div>
                     </td>
                     <td height="40%">
@@ -121,7 +123,7 @@
                     </td>
                     <td rowspan="2" style="vertical-align: bottom">
                         <div class="spotify-user-metadata">
-                            Roytjuh99 <img id="spotify-logo" src="img/spotify_white.png ">
+                            <span id="spotify-user">Roytjuh99</span> <img id="spotify-logo" src="img/spotify_white.png ">
                         </div>
                     </td>
                 </tr>
