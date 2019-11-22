@@ -1,4 +1,4 @@
-const slideTime = 5000; // ms
+const slideTime = 3000; // ms
 
 /**
  * @class Carousel
@@ -20,7 +20,6 @@ class Carousel {
     run() {
         this._state.draw();
         this._state.getNext(this);
-        // Update data
     }
 
     update_data() {
@@ -77,12 +76,7 @@ class Slide {
         this._data = data
     }
 
-    draw() {
-        //console.log("Timeout set for " + this._next);
-        //sleep(5000);
-        //setTimeout(this._next.draw(), slideTime);
-        //console.log("Timeout done for " + this._next);
-    }
+    draw() {}
 }
 
 /**
@@ -98,7 +92,6 @@ class DrankTonight extends Slide {
 
     draw() {
         this.contentBox.innerHTML = this.html;
-        
         var ctx = document.getElementById("graph");
         var myChart = new Chart(ctx, {
             type: 'bar',
@@ -274,9 +267,10 @@ function borderColors(length) {
 
 let carousel;
 let slides = {};
+let contentBox;
 
-function startCarousel() {
-    const contentBox = document.getElementById("content");
+function initCarousel() {
+    contentBox = document.getElementById("content");
 
     slides.DrankTonight = new DrankTonight(contentBox, "Meest gedronken vanavond", `<h1>Meest gedronken vanavond</h1><canvas class="graph" id="graph"></canvas>`);
     slides.Debt = new Debt(contentBox, "Grootste schuld", '');
@@ -297,15 +291,29 @@ function startCarousel() {
 
     carousel = new Carousel();
     carousel.state = slides.DrankTonight;
-    runCarouselObj();
+    return carousel.state.constructor.name
 }
 
 let carouselLoop;
 
 function runCarouselObj() {
+    setTimeout(drawWithCarouselObj, 500);
+    hideContentBox();
+}
+
+function drawWithCarouselObj() {
     carousel.run();
     carouselLoop = setTimeout(runCarouselObj, slideTime);
+    showContentBox();
     carousel.update_data()
+}
+
+function hideContentBox() {
+    contentBox.style.opacity = '0'
+}
+
+function showContentBox() {
+    contentBox.style.opacity = '1'
 }
 
 function interruptCarousel(interruptingState) {

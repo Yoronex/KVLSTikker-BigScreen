@@ -2,10 +2,9 @@
 function startFunctions() {
     startTime();
     pingTikker();
-    spotify_update();
-    spotifyprogress();
-    //startMarquee();
-    startCarousel();
+    initFromTikker(
+        initCarousel()
+    );
 }
 
 function startTime() {
@@ -239,4 +238,9 @@ function updateDailyStats(daily, max) {
         row.cells[1].innerHTML = daily[id];
         row.cells[2].innerHTML = max["max-stats-" + id];
     }
+}
+
+function hideLoading() {
+    console.log("init finished, hide loading");
+    document.getElementById('loading-screen').style.opacity = '0'
 }

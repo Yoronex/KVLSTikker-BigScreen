@@ -12,62 +12,77 @@ socket.on('my response', function(msg) {
 });
 
 socket.on('spotify update', function(msg) {
-    if (msg['logged in'] === false) {
-    } else {
-        if (msg.data == null) {
-            $('#track-title').html("The silence...");
-            $('#track-artist').html("I could get used to it");
-        } else {
-            currentSpotifyTrackEnd = new Date();
-            currentSpotifyTrackEnd = new Date(currentSpotifyTrackEnd.getTime() + msg.data.item['duration_ms'] - msg.data['progress_ms']);
-            currentSpotifyTrackPlaying = msg.data['is_playing'];
-            currentSpotifyTrackProgress = msg.data['progress_ms'];
-            if (currentSpotifyTrack !== msg.data.item.id) {
-                currentSpotifyTrack = msg.data.item.id;
-                currentSpotifyTrackLength = msg.data.item['duration_ms'];
-                $('#track-title').html(msg.data.item.name);
-                let trackArtists = "";
-                for (let i = 0; i < msg.data.item.artists.length; i++) {
-                    trackArtists = trackArtists + msg.data.item.artists[i].name + ", "
-                }
-                $('#track-artist').html(trackArtists.substring(0, trackArtists.length - 2));
-
-                let cover = tikkerUrl + "/static/covers/" + msg.data.item.album.id + ".jpg";
-                document.getElementById("global-background").style.backgroundImage = "url(" + cover + ")";
-                document.getElementById("album-cover").src = cover;
-            }
-        }
-    }
+    updateSpotify(msg);
 });
+
+function updateSpotify(msg) {
+    const defaultTitle = "";
+    const defaultArtist = "";
+    if (msg['logged in'] === true && msg.data !== null) {
+        currentSpotifyTrackEnd = new Date();
+        currentSpotifyTrackEnd = new Date(currentSpotifyTrackEnd.getTime() + msg.data.item['duration_ms'] - msg.data['progress_ms']);
+        currentSpotifyTrackPlaying = msg.data['is_playing'];
+        currentSpotifyTrackProgress = msg.data['progress_ms'];
+        if (currentSpotifyTrack !== msg.data.item.id) {
+            currentSpotifyTrack = msg.data.item.id;
+            currentSpotifyTrackLength = msg.data.item['duration_ms'];
+            $('#track-title').html(msg.data.item.name);
+            let trackArtists = "";
+            for (let i = 0; i < msg.data.item.artists.length; i++) {
+                trackArtists = trackArtists + msg.data.item.artists[i].name + ", "
+            }
+            $('#track-artist').html(trackArtists.substring(0, trackArtists.length - 2));
+
+            let cover = tikkerUrl + "/static/covers/" + msg.data.item.album.id + ".jpg";
+            document.getElementById("global-background").style.backgroundImage = "url(" + cover + ")";
+            document.getElementById("album-cover").src = cover;
+        }
+    } else {
+        $('#track-title').html(defaultTitle);
+        $('#track-artist').html(defaultArtist);
+    }
+}
 
 socket.on('transaction', function(msg) {
     queueMarquee(msg.message);
 });
 
 socket.on('slide_data', function(msg) {
-    //console.log("Recv slide data for " + msg.name);
     slides[msg.name].data = msg.data
 });
 
 socket.on('slide_interrupt', function(msg) {
     msg = msg.message;
-    //console.log("Recei interrupt for " + msg.name);
     slides[msg.name].data = msg.data;
     interruptCarousel(slides[msg.name])
 });
 
-socket.on('stats', function(msg) {
-    console.log("Received stats update");
+socket.on('init', function(msg) {
+    console.log("received init response");
     console.log(msg);
+    slides[msg.slide.name].data = msg.slide.data;
+    updateSpotify(msg.spotify);
+    updateDailyStats(msg.stats.daily, msg.stats.max);
+    runCarouselObj();
+    spotify_send_update();
+    spotifyprogress();
+    hideLoading();
+});
+
+socket.on('stats', function(msg) {
     updateDailyStats(msg.daily, msg.max);
 });
 
+function initFromTikker(slideName) {
+    console.log("send init request");
+    socket.emit('init', {"slide_name": slideName})
+}
+
 function updateSlideData(name) {
-    //console.log("send slide data for " + name);
     socket.emit('slide_data', {"name": name})
 }
 
-function spotify_update() {
+function spotify_send_update() {
     socket.emit('spotify');
-    var t = setTimeout(spotify_update, 5000);
+    var t = setTimeout(spotify_send_update, 5000);
 }
