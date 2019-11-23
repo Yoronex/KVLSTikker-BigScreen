@@ -19,7 +19,7 @@ function updateSpotify(msg) {
     const defaultTitle = "";
     const defaultArtist = "";
     if (msg['logged in'] === true && msg.data !== null) {
-        document.getElementById('spotify-user').innerHTML = msg['username'];
+        document.getElementById('spotify-user').innerHTML = msg['user'];
         currentSpotifyTrackEnd = new Date();
         currentSpotifyTrackEnd = new Date(currentSpotifyTrackEnd.getTime() + msg.data.item['duration_ms'] - msg.data['progress_ms']);
         currentSpotifyTrackPlaying = msg.data['is_playing'];
@@ -50,6 +50,9 @@ socket.on('transaction', function(msg) {
 });
 
 socket.on('slide_data', function(msg) {
+    if (msg.name === 'Quote') {
+        console.log(msg)
+    }
     slides[msg.name].data = msg.data
 });
 
