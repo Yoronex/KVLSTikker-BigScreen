@@ -183,7 +183,7 @@ class Quote extends Slide {
 
     draw() {
         const quote = this._data;
-        this.contentBox.innerHTML = `<div id="quote" style="font-size: 30px; height: 100%"><table style="width: 100%; height: 100%"><tr><td style="vertical-align: center">${quote}</td></tr></table></div>`;
+        this.contentBox.innerHTML = `<div id="quote" style="font-size: 30px; height: 100%"><table style="width: 100%; height: 100%"><tr><td style="vertical-align: center; font-size: 40px"><i>${quote}</i></td></tr></table></div>`;
     }
 }
 
@@ -229,7 +229,7 @@ class Message extends Slide {
 
     draw() {
         const quote = this._data;
-        this.contentBox.innerHTML = `<div id="quote" style="font-size: 30px; height: 100%"><table style="width: 100%; height: 100%"><tr><td style="vertical-align: center">${quote}</td></tr></table></div>`;
+        this.contentBox.innerHTML = `<div id="quote" style="font-size: 30px; height: 100%"><table style="width: 100%; height: 100%"><tr><td style="vertical-align: center; font-size: 40px">${quote}</td></tr></table></div>`;
     }
 }
 

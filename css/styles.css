@@ -268,7 +268,7 @@ img {
 .last-tikked {
     float: left;
     margin: 10px 30px;
-    width: 1200px;
+    width: 1100px;
     height: 4rem;
     font-size: 28px;
     /*box-shadow: 12px 0 15px -4px rgba(255, 255, 255, 0.8), -12px 0 8px -4px rgba(255, 255, 255, 0.8);*/
@@ -279,12 +279,12 @@ img {
 }
 
 .clock {
-    font-size: 60px;
+    font-size: 80px;
     text-align: right;
     overflow: hidden;
     white-space: nowrap;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 40px;
+    margin-right: 40px;
 }
 
 .contentbackground {
