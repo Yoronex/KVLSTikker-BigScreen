@@ -129,6 +129,144 @@ class DrankTonight extends Slide {
     }
 }
 
+class MostDrank1 extends Slide {
+    constructor() {
+        super(arguments);
+        this._data = {"labels": [], "values": [], "product_name": ""}
+    }
+
+    draw() {
+        const name = this._data.product_name;
+        this.contentBox.innerHTML = `<h1>Gedronken: ${name}</h1><canvas class="graph" id="graph"></canvas>`;
+        var ctx = document.getElementById("graph");
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: this._data.labels,
+                datasets: [{
+                    data: this._data.values,
+                    backgroundColor: backgroundColors(this._data.values.length),
+                    borderColor: borderColors(this._data.values.length),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                animation: false,
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            fontSize: 30,
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            fontSize: 30
+                        }
+                    }]
+                }
+            }
+        });
+    }
+}
+
+class MostDrank2 extends Slide {
+    constructor() {
+        super(arguments);
+        this._data = {"labels": [], "values": [], "product_name": ""}
+    }
+
+    draw() {
+        const name = this._data.product_name;
+        this.contentBox.innerHTML = `<h1>Gedronken: ${name}</h1><canvas class="graph" id="graph"></canvas>`;
+        var ctx = document.getElementById("graph");
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: this._data.labels,
+                datasets: [{
+                    data: this._data.values,
+                    backgroundColor: backgroundColors(this._data.values.length),
+                    borderColor: borderColors(this._data.values.length),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                animation: false,
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            fontSize: 30,
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            fontSize: 30
+                        }
+                    }]
+                }
+            }
+        });
+    }
+}
+
+class MostDrank3 extends Slide {
+    constructor() {
+        super(arguments);
+        this._data = {"labels": [], "values": [], "product_name": ""}
+    }
+
+    draw() {
+        const name = this._data.product_name;
+        this.contentBox.innerHTML = `<h1>Gedronken: ${name}</h1><canvas class="graph" id="graph"></canvas>`;
+        var ctx = document.getElementById("graph");
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: this._data.labels,
+                datasets: [{
+                    data: this._data.values,
+                    backgroundColor: backgroundColors(this._data.values.length),
+                    borderColor: borderColors(this._data.values.length),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                animation: false,
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            fontSize: 30,
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            fontSize: 30
+                        }
+                    }]
+                }
+            }
+        });
+    }
+}
+
 /**
  * @class PriceList
  * @description Table of prices of all available products
@@ -150,24 +288,32 @@ class PriceList extends Slide {
             this._data.prices.push("");
         }
 
-        let fontSize = parseInt(Math.floor(height / products) / 1.5);
+        let fontSize = parseInt(Math.floor(height / products));
 
-        if (fontSize > 24) {
-            fontSize = 24;
+        if (fontSize > 32) {
+            fontSize = 32;
         }
 
         let table = "";
-        for (let i = 0; i < products; i++) {
-            let name = this._data.names[i];
-            let price = this._data.prices[i];
-            if (i % 2 === 0) {
-                table = table + `<tr><td style='text-align: right; width: 23%'>${name}</td><td style="width: 4%"></td><td style='text-align: left; width: 23%'>${price}</td>`
-            } else {
-                table = table + `<td style='text-align: right; width: 23%'>${name}</td><td style="width: 4%"></td><td style='text-align: left; width: 23%'>${price}</td></tr>`
+        for (let j = 0; j < 2; j++) {
+            if (j % 2 === 1) {
+                table = table + `<td style="width: 6%"></td>`
             }
+            table = table + `<td style="width: 47%"><table style="width: 100%;">`;
+
+            for (let i = 0; i < products / 2; i++) {
+                let name = this._data.names[i + j * products / 2];
+                let price = this._data.prices[i + j * products / 2];
+                if (j % 2 === 0) {
+                    table = table + `<tr><td style='text-align: right;'>${name}</td><td style="width: 5%"></td><td style='text-align: left;'>${price}</td></tr>`;
+                } else {
+                    table = table + `<tr><td style='text-align: right;'>${price}</td><td style="width: 5%"></td><td style='text-align: left;'>${name}</td></tr>`;
+                }
+            }
+            table = table + `</table></td>`;
         }
 
-        this.contentBox.innerHTML = `<h1>Drankjes</h1><div class="pricelist" id="pricetable"><table width="100%" style="font-size: ${fontSize}px">${table}</table></div>`
+        this.contentBox.innerHTML = `<h1>Drankjes</h1><div class="pricelist" id="pricetable"><table width="100%" style="font-size: ${fontSize}px"><tr>${table}</tr></table></div>`
     }
 }
 
@@ -183,7 +329,7 @@ class Quote extends Slide {
 
     draw() {
         const quote = this._data;
-        this.contentBox.innerHTML = `<div id="quote" style="font-size: 30px; height: 100%"><table style="width: 100%; height: 100%"><tr><td style="vertical-align: center; font-size: 40px"><i>${quote}</i></td></tr></table></div>`;
+        this.contentBox.innerHTML = `<div id="quote" style="font-size: 30px; height: 100%; padding: 30px"><table style="width: 100%; height: 100%"><tr><td style="vertical-align: center; font-size: 40px"><i>${quote}</i></td></tr></table></div>`;
     }
 }
 
@@ -246,13 +392,34 @@ class Title extends Slide {
 <table style="width: 100%; height: 100%">
 <tr>
 <td style="vertical-align: center;">
-<b style="font-size: 56px">Prins Pils</b><br>${beer}
+<b style="font-size: 56px">Prins Pils</b style="font-size: 56px"><br>${beer}
 </td>
 </tr>
 <tr>
 <td style="vertical-align: center;">
 <b style="font-size: 56px">Flügelmeisje</b><br>${flugel}
 </td></tr></table></div>`
+    }
+}
+
+class RecentlyPlayed extends Slide {
+    constructor() {
+        super(arguments);
+        this._data = [];
+    }
+
+    draw() {
+        const pre = `<h1>Recent afgespeelde nummers</h1></h1><table style="width: 100%;">`;
+
+        let content = "";
+        for (let i = 0; i < this._data.length; i++) {
+            const timestamp = this._data[i].timestamp;
+            const track = this._data[i].artist + " - " + this._data[i].title;
+            content = content + `<tr><td style="text-align: right">${timestamp}</td><td style="width: 5%"></td><td style="text-align: left;">${track}</td></tr>`
+        }
+
+        const post = `</table>`;
+        this.contentBox.innerHTML = pre + content + post;
     }
 }
 
@@ -296,6 +463,10 @@ function initCarousel() {
     contentBox = document.getElementById("content");
 
     slides.DrankTonight = new DrankTonight(contentBox, "Meest gedronken vanavond", `<h1>Meest gedronken vanavond</h1><canvas class="graph" id="graph"></canvas>`);
+    slides.MostDrank1 = new MostDrank1(contentBox, "Gedronken: ", "");
+    slides.MostDrank2 = new MostDrank2(contentBox, "Gedronken: ", "");
+    slides.MostDrank3 = new MostDrank3(contentBox, "Gedronken: ", "");
+    slides.RecentlyPlayed = new RecentlyPlayed(contentBox, "Laatst afgespeelde nummers", "");
     slides.Title = new Title(contentBox, "Burgelijke Titels", "");
     slides.Debt = new Debt(contentBox, "Grootste schuld", '');
     slides.PriceList = new PriceList(contentBox, "Drankjes", '');
@@ -307,7 +478,11 @@ function initCarousel() {
         "labels": ['Bier', 'Apfelkorn', 'Cola'],
         "data": [10, 4, 7]};*/
 
-    slides.DrankTonight.next = slides.Title;
+    slides.DrankTonight.next = slides.MostDrank1;
+    slides.MostDrank1.next = slides.MostDrank2;
+    slides.MostDrank2.next = slides.MostDrank3;
+    slides.MostDrank3.next = slides.RecentlyPlayed;
+    slides.RecentlyPlayed.next = slides.Title;
     slides.Title.next = slides.Debt;
     slides.Debt.next = slides.Quote;
     slides.Quote.next = slides.PriceList;
