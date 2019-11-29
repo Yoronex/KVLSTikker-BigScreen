@@ -65,14 +65,13 @@ h1 {
 }
 
 .img-bot {
-    background-image: url("../ABGT-Twitch-Square.png");
     z-index: -3;
     opacity: 1;
     position: absolute
 }
 
 .img-top {
-    background-image: url("../test_background.jpg");
+    background-image: url("../img/default-background.png");
     opacity: 1;
     -webkit-transition: opacity 1s;
     transition: opacity 1s;
