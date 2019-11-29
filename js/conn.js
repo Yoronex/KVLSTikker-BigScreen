@@ -50,7 +50,7 @@ socket.on('transaction', function(msg) {
 });
 
 socket.on('slide_data', function(msg) {
-    if (msg.name === 'Quote') {
+    if (msg.name === 'Title') {
         console.log(msg)
     }
     slides[msg.name].data = msg.data
@@ -64,7 +64,6 @@ socket.on('slide_interrupt', function(msg) {
 
 socket.on('init', function(msg) {
     console.log("received init response");
-    console.log(msg);
     slides[msg.slide.name].data = msg.slide.data;
     updateSpotify(msg.spotify);
     updateDailyStats(msg.stats.daily, msg.stats.max);

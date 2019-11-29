@@ -233,6 +233,29 @@ class Message extends Slide {
     }
 }
 
+class Title extends Slide {
+    constructor() {
+        super(arguments);
+        this._data = {'beer': "", 'flugel': ""}
+    }
+
+    draw() {
+        const beer = this._data.beer;
+        const flugel = this._data.flugel;
+        this.contentBox.innerHTML = `<div id="title" style="font-size: 40px; height: 100%">
+<table style="width: 100%; height: 100%">
+<tr>
+<td style="vertical-align: center;">
+<b style="font-size: 56px">Prins Pils</b><br>${beer}
+</td>
+</tr>
+<tr>
+<td style="vertical-align: center;">
+<b style="font-size: 56px">Flügelmeisje</b><br>${flugel}
+</td></tr></table></div>`
+    }
+}
+
 /**
  * supportive functions
  */
@@ -273,6 +296,7 @@ function initCarousel() {
     contentBox = document.getElementById("content");
 
     slides.DrankTonight = new DrankTonight(contentBox, "Meest gedronken vanavond", `<h1>Meest gedronken vanavond</h1><canvas class="graph" id="graph"></canvas>`);
+    slides.Title = new Title(contentBox, "Burgelijke Titels", "");
     slides.Debt = new Debt(contentBox, "Grootste schuld", '');
     slides.PriceList = new PriceList(contentBox, "Drankjes", '');
     slides.Quote = new Quote(contentBox, "Citaat", "");
@@ -283,7 +307,8 @@ function initCarousel() {
         "labels": ['Bier', 'Apfelkorn', 'Cola'],
         "data": [10, 4, 7]};*/
 
-    slides.DrankTonight.next = slides.Debt;
+    slides.DrankTonight.next = slides.Title;
+    slides.Title.next = slides.Debt;
     slides.Debt.next = slides.Quote;
     slides.Quote.next = slides.PriceList;
     slides.PriceList.next = slides.DrankTonight;
