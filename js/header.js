@@ -74,6 +74,31 @@ function pingTikker() {
     var t = setTimeout(pingTikker, 15000);
 }
 
+function setTikkerOnline() {
+    var circle = document.getElementById('status-dot');
+    var status_text = document.getElementById('status-text');
+    if (alreadyoffline) {
+        alreadyoffline = false;
+        circle.style.backgroundColor = 'green';
+        circle.classList.add("pulsation");
+        status_text.style.color = 'green';
+        status_text.innerHTML = "Tikker online";
+    }
+}
+
+function setTikkerOffline() {
+    var circle = document.getElementById('status-dot');
+    var status_text = document.getElementById('status-text');
+    if (!alreadyoffline) {
+        alreadyoffline = true;
+        circle.style.backgroundColor = 'red';
+        circle.classList.remove("pulsation");
+        status_text.style.color = 'red';
+        status_text.innerHTML = "Tikker offline";
+    }
+}
+
+
 function millisToMinutesAndSeconds(millis) {
     var minutes = Math.floor(millis / 60000);
     var seconds = ((millis % 60000) / 1000).toFixed(0);
