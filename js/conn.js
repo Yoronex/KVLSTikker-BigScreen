@@ -77,6 +77,14 @@ socket.on('stats', function(msg) {
     updateDailyStats(msg.daily, msg.max);
 });
 
+socket.on('snow', function() {
+    snowStorm.stop();
+});
+
+socket.on('reload', function() {
+    location.reload();
+});
+
 function initFromTikker(slideName) {
     console.log("send init request");
     socket.emit('init', {"slide_name": slideName})
