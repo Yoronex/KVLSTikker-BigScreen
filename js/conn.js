@@ -50,7 +50,7 @@ socket.on('transaction', function(msg) {
 });
 
 socket.on('slide_data', function(msg) {
-    if (msg.name === 'MostDrank1' || msg.name === 'MostDrank2' || msg.name === 'MostDrank3') {
+    if (msg.name === 'Calendar' || msg.name === 'MostDrank2' || msg.name === 'MostDrank3') {
         console.log(msg)
     }
     slides[msg.name].data = msg.data
@@ -63,6 +63,7 @@ socket.on('slide_interrupt', function(msg) {
 });
 
 socket.on('init', function(msg) {
+    console.log(msg);
     console.log("received init response");
     slides[msg.slide.name].data = msg.slide.data;
     updateSpotify(msg.spotify);
@@ -87,7 +88,7 @@ socket.on('reload', function() {
 
 function initFromTikker(slideName) {
     console.log("send init request");
-    socket.emit('init', {"slide_name": slideName})
+    socket.emit('init', {"slide_name": slideName, "slide_time": slideTime / 1000})
 }
 
 function updateSlideData(name) {

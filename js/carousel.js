@@ -1,4 +1,4 @@
-const slideTime = 3000; // ms
+const slideTime = 20000; // ms
 
 /**
  * @class Carousel
@@ -415,7 +415,34 @@ class RecentlyPlayed extends Slide {
         for (let i = 0; i < this._data.length; i++) {
             const timestamp = this._data[i].timestamp;
             const track = this._data[i].artist + " - " + this._data[i].title;
-            content = content + `<tr><td style="text-align: right">${timestamp}</td><td style="width: 5%"></td><td style="text-align: left;">${track}</td></tr>`
+            content = content + `<tr><td style="text-align: right; min-width: 120px; vertical-align: top;">${timestamp}</td><td style="width: 5%"></td><td style="text-align: left;">${track}</td></tr>`
+        }
+
+        const post = `</table>`;
+        this.contentBox.innerHTML = pre + content + post;
+    }
+}
+
+class Calendar extends Slide {
+    constructor() {
+        super(arguments);
+        this._data = {'upcoming_events': false};
+    }
+
+    draw() {
+        const pre = `<h1>Aankomende activiteiten</h1></h1><table style="width: 100%;">`;
+
+        let content = "";
+        let name, date, days;
+        if (this._data.upcoming_events) {
+            for (let i = 0; i < this._data.calendar.length; i++) {
+                name = this._data.calendar[i].name;
+                date = this._data.calendar[i].date;
+                days = this._data.calendar[i].days;
+                content = content + `<tr><td style="text-align: right; min-width: 250px; vertical-align: top;">${date}</td><td style="width: 5%"><td style="text-align: left; width: 180px; vertical-align: top;">(${days} dagen)</td><td style="text-align: left;">${name}</td></tr>`
+            }
+        } else {
+            content = `<tr><td style="text-align: center;">Er zijn geen aankomende activiteiten :(</td></tr>`
         }
 
         const post = `</table>`;
@@ -471,6 +498,7 @@ function initCarousel() {
     slides.Debt = new Debt(contentBox, "Grootste schuld", '');
     slides.PriceList = new PriceList(contentBox, "Drankjes", '');
     slides.Quote = new Quote(contentBox, "Citaat", "");
+    slides.Calendar = new Calendar(contentBox, "Kalender", "");
 
     slides.Message = new Message(contentBox, "Bericht", '');
 
@@ -482,7 +510,8 @@ function initCarousel() {
     slides.MostDrank1.next = slides.MostDrank2;
     slides.MostDrank2.next = slides.MostDrank3;
     slides.MostDrank3.next = slides.RecentlyPlayed;
-    slides.RecentlyPlayed.next = slides.Title;
+    slides.RecentlyPlayed.next = slides.Calendar;
+    slides.Calendar.next = slides.Title;
     slides.Title.next = slides.Debt;
     slides.Debt.next = slides.Quote;
     slides.Quote.next = slides.PriceList;
@@ -490,7 +519,7 @@ function initCarousel() {
 
 
     carousel = new Carousel();
-    carousel.state = slides.DrankTonight;
+    carousel.state = slides.Calendar;
     return carousel.state.constructor.name
 }
 
