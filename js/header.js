@@ -148,12 +148,16 @@ function spotifyprogress() {
 let backgroundSwitch;
 let busy = false;
 
-function updateCover(cover) {
+function updateCover(cover, backgroundCover=null) {
     let front_background = document.getElementById('global-background-top');
     let back_background = document.getElementById('global-background-back');
     let front_cover = document.getElementById('album-cover-top');
     let back_cover = document.getElementById('album-cover-back');
-    back_background.style.backgroundImage = "url(" + cover + ")";
+    if (backgroundCover === null) {
+        back_background.style.backgroundImage = "url(" + cover + ")";
+    } else {
+        back_background.style.backgroundImage = "url(" + backgroundCover + ")";
+    }
     back_cover.src = cover;
     front_background.style.opacity = '0';
     front_cover.style.opacity = '0';
