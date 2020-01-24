@@ -264,6 +264,19 @@ img {
     height: 100px;
 }
 
+.bk-box {
+    width: 100%;
+    height: 300px;
+    font-size: 70px;
+}
+
+#bk {
+    text-align: center;
+    margin-top: 100px;
+}
+
+
+
 .last-tikked {
     float: left;
     margin: 10px 30px;

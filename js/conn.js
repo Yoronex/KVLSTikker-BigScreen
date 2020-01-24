@@ -87,6 +87,9 @@ socket.on('slide_interrupt', function(msg) {
 socket.on('init', function(msg) {
     console.log(msg);
     console.log("received init response");
+    if (msg.snow === false) {
+        snowStorm.stop();
+    }
     slides[msg.slide.name].data = msg.slide.data;
     updateSpotify(msg.spotify);
     updateDailyStats(msg.stats.daily, msg.stats.max);
@@ -108,6 +111,16 @@ socket.on('reload', function() {
     location.reload();
 });
 
+socket.on('biertje_kwartiertje_start', function(msg) {
+    console.log("Start biertje kwartiertje");
+    startBK(msg.minutes * 60 * 1000);
+});
+
+socket.on('biertje_kwartiertje_stop', function() {
+    console.log("Stop biertje kwartiertje");
+    bkStarted = false;
+});
+
 function initFromTikker(slideName) {
     console.log("send init request");
     socket.emit('init', {"slide_name": slideName, "slide_time": slideTime / 1000})
@@ -120,4 +133,8 @@ function updateSlideData(name) {
 function spotify_send_update() {
     socket.emit('spotify');
     var t = setTimeout(spotify_send_update, spotifyRefreshTime);
+}
+
+function biertje_kwartiertje_exec() {
+    socket.emit('biertje_kwartiertje_exec');
 }
