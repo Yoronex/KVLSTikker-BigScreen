@@ -43,7 +43,6 @@ function startBK(interval) {
 }
 
 function updateBK() {
-    let t1 = new Date();
     // Default times if bk not enabled
     let s = "--";
     let m = "--";
@@ -86,8 +85,6 @@ function updateBK() {
     // Apply the calculated time
     bkMinute.innerHTML = m;
     bkSecond.innerHTML = s;
-
-    console.log("Update BK time: " + (new Date() - t1));
 }
 
 function checkTime(i) {

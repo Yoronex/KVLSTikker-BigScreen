@@ -369,8 +369,8 @@ class Debt extends Slide {
     }
 
     draw() {
-        let table = ""
-        for (let i = 0; i < Math.min(12, this._data.names.length); i++) {
+        let table = "";
+        for (let i = 0; i < Math.min(10, this._data.names.length); i++) {
             const name = this._data.names[i];
             const debt = this._data.amount[i];
             if (i === 0) {
@@ -385,10 +385,9 @@ class Debt extends Slide {
 
             const row = `<td style="text-align: right; width: 48%">${name}</td><td style="width: 4%"></td><td style="text-align: left; width: 48%; color: red;">${debt}</td></tr>`
             table = table + row;
-
-            this.contentBox.innerHTML = `<h1>Meeste schulden</h1><table style='width: 100%'>${table}</table>`
-            return true
         }
+        this.contentBox.innerHTML = `<h1>Meeste schulden</h1><table style='width: 100%'>${table}</table>`
+        return true
     }
 }
 
@@ -443,7 +442,7 @@ class RecentlyPlayed extends Slide {
 
         let content = "";
         for (let i = 0; i < this._data.length; i++) {
-            const timestamp = this._data[i].timestamp;
+            const timestamp = "- " + this._data[i].timestamp;
             const track = this._data[i].artist + " - " + this._data[i].title;
             content = content + `<tr><td style="text-align: right; min-width: 120px; vertical-align: top;">${timestamp}</td><td style="width: 5%"></td><td style="text-align: left;">${track}</td></tr>`
         }

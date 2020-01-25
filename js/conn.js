@@ -72,9 +72,7 @@ socket.on('transaction', function(msg) {
 });
 
 socket.on('slide_data', function(msg) {
-    if (msg.name === 'Calendar' || msg.name === 'MostDrank2' || msg.name === 'MostDrank3') {
-        console.log(msg)
-    }
+    console.log(msg);
     slides[msg.name].data = msg.data
 });
 
