@@ -1,4 +1,4 @@
-const slideTime = 20000; // ms
+const slideTime = 2000; // ms
 
 /**
  * @class Carousel
@@ -18,8 +18,13 @@ class Carousel {
     }
 
     run() {
-        this._state.draw();
-        this._state.getNext(this);
+        if (!this._state.draw()) {
+            this._state.getNext(this);
+            this.update_data();
+            this.run();
+        } else {
+            this._state.getNext(this);
+        }
     }
 
     update_data() {
@@ -91,6 +96,9 @@ class DrankTonight extends Slide {
     }
 
     draw() {
+        if (this._data.values.length === 0) {
+            return false;
+        }
         this.contentBox.innerHTML = this.html;
         var ctx = document.getElementById("graph");
         var myChart = new Chart(ctx, {
@@ -126,6 +134,7 @@ class DrankTonight extends Slide {
                 }
             }
         });
+        return true
     }
 }
 
@@ -136,6 +145,9 @@ class MostDrank1 extends Slide {
     }
 
     draw() {
+        if (this._data.values.length === 0) {
+            return false;
+        }
         const name = this._data.product_name;
         this.contentBox.innerHTML = `<h1>Gedronken: ${name}</h1><canvas class="graph" id="graph"></canvas>`;
         var ctx = document.getElementById("graph");
@@ -172,6 +184,7 @@ class MostDrank1 extends Slide {
                 }
             }
         });
+        return true
     }
 }
 
@@ -182,6 +195,9 @@ class MostDrank2 extends Slide {
     }
 
     draw() {
+        if (this._data.values.length === 0) {
+            return false;
+        }
         const name = this._data.product_name;
         this.contentBox.innerHTML = `<h1>Gedronken: ${name}</h1><canvas class="graph" id="graph"></canvas>`;
         var ctx = document.getElementById("graph");
@@ -218,6 +234,7 @@ class MostDrank2 extends Slide {
                 }
             }
         });
+        return true
     }
 }
 
@@ -228,6 +245,9 @@ class MostDrank3 extends Slide {
     }
 
     draw() {
+        if (this._data.values.length === 0) {
+            return false;
+        }
         const name = this._data.product_name;
         this.contentBox.innerHTML = `<h1>Gedronken: ${name}</h1><canvas class="graph" id="graph"></canvas>`;
         var ctx = document.getElementById("graph");
@@ -264,6 +284,7 @@ class MostDrank3 extends Slide {
                 }
             }
         });
+        return true
     }
 }
 
@@ -314,6 +335,8 @@ class PriceList extends Slide {
         }
 
         this.contentBox.innerHTML = `<h1>Drankjes</h1><div class="pricelist" id="pricetable"><table width="100%" style="font-size: ${fontSize}px"><tr>${table}</tr></table></div>`
+
+        return true
     }
 }
 
@@ -330,6 +353,7 @@ class Quote extends Slide {
     draw() {
         const quote = this._data;
         this.contentBox.innerHTML = `<div id="quote" style="font-size: 30px; height: 100%; padding: 30px"><table style="width: 100%; height: 100%"><tr><td style="vertical-align: center; font-size: 40px"><i>${quote}</i></td></tr></table></div>`;
+        return true
     }
 }
 
@@ -363,6 +387,7 @@ class Debt extends Slide {
             table = table + row;
 
             this.contentBox.innerHTML = `<h1>Meeste schulden</h1><table style='width: 100%'>${table}</table>`
+            return true
         }
     }
 }
@@ -376,6 +401,7 @@ class Message extends Slide {
     draw() {
         const quote = this._data;
         this.contentBox.innerHTML = `<div id="quote" style="font-size: 30px; height: 100%"><table style="width: 100%; height: 100%"><tr><td style="vertical-align: center; font-size: 40px">${quote}</td></tr></table></div>`;
+        return true
     }
 }
 
@@ -398,7 +424,8 @@ class Title extends Slide {
 <tr>
 <td style="vertical-align: center;">
 <b style="font-size: 56px">Flügelmeisje</b><br>${flugel}
-</td></tr></table></div>`
+</td></tr></table></div>`;
+        return true
     }
 }
 
@@ -409,6 +436,9 @@ class RecentlyPlayed extends Slide {
     }
 
     draw() {
+        if (this._data.length === 0) {
+            return false;
+        }
         const pre = `<h1>Recent afgespeelde nummers</h1></h1><table style="width: 100%;">`;
 
         let content = "";
@@ -420,6 +450,7 @@ class RecentlyPlayed extends Slide {
 
         const post = `</table>`;
         this.contentBox.innerHTML = pre + content + post;
+        return true
     }
 }
 
@@ -447,6 +478,7 @@ class Calendar extends Slide {
 
         const post = `</table>`;
         this.contentBox.innerHTML = pre + content + post;
+        return true
     }
 }
 
@@ -506,16 +538,16 @@ function initCarousel() {
         "labels": ['Bier', 'Apfelkorn', 'Cola'],
         "data": [10, 4, 7]};*/
 
-    slides.DrankTonight.next = slides.MostDrank1;
-    slides.MostDrank1.next = slides.MostDrank2;
-    slides.MostDrank2.next = slides.MostDrank3;
-    slides.MostDrank3.next = slides.RecentlyPlayed;
-    slides.RecentlyPlayed.next = slides.Calendar;
-    slides.Calendar.next = slides.Title;
-    slides.Title.next = slides.Debt;
-    slides.Debt.next = slides.Quote;
-    slides.Quote.next = slides.PriceList;
     slides.PriceList.next = slides.DrankTonight;
+    slides.DrankTonight.next = slides.Calendar;
+    slides.Calendar.next = slides.MostDrank1;
+    slides.MostDrank1.next = slides.Quote;
+    slides.Quote.next = slides.MostDrank2;
+    slides.MostDrank2.next = slides.Debt;
+    slides.Debt.next = slides.MostDrank3;
+    slides.MostDrank3.next = slides.RecentlyPlayed;
+    slides.RecentlyPlayed.next = slides.Title;
+    slides.Title.next = slides.PriceList;
 
 
     carousel = new Carousel();
@@ -531,10 +563,10 @@ function runCarouselObj() {
 }
 
 function drawWithCarouselObj() {
-    carousel.run();
     carouselLoop = setTimeout(runCarouselObj, slideTime);
+    carousel.run();
+    carousel.update_data();
     showContentBox();
-    carousel.update_data()
 }
 
 function hideContentBox() {

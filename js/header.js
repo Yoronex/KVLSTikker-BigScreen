@@ -1,10 +1,19 @@
+let bkInterval;
+let bkEndTime;
+let bkStarted = false;
 
 function startFunctions() {
-    startTime();
+    updateClocks();
     pingTikker();
     initFromTikker(
         initCarousel()
     );
+}
+
+function updateClocks() {
+    var t = setTimeout(updateClocks, 500);
+    startTime();
+    updateBK();
 }
 
 function startTime() {
@@ -23,7 +32,62 @@ function startTime() {
         document.getElementById('clock-middle').innerHTML = "";
         document.getElementById('clock-minute').innerHTML = m;
     }
-    var t = setTimeout(startTime, 500);
+}
+
+// Start Biertje Kwartiertje if it is not started yet
+function startBK(interval) {
+    // Interval must be in milliseconds
+    bkInterval = interval;
+    bkEndTime = new Date(new Date().getTime() + interval);
+    bkStarted = true;
+}
+
+function updateBK() {
+    let t1 = new Date();
+    // Default times if bk not enabled
+    let s = "--";
+    let m = "--";
+    let bkMinute = document.getElementById("bk-minute");
+    let bkMiddle = document.getElementById("bk-middle");
+    let bkSecond = document.getElementById("bk-second");
+    // If bk is enabled, we change s and m
+    if (bkStarted) {
+        // Calculate difference between now and end in milliseconds
+        let diff = bkEndTime - new Date();
+        // If the difference is negative, the endtime has passed so we calculate the new one
+        if (diff < 0) {
+            bkEndTime = new Date(new Date().getTime() + bkInterval);
+            diff = bkEndTime - new Date();
+            // Send a message to Tikker to create transactions for all participants
+            biertje_kwartiertje_exec();
+        }
+        // Convert milliseconds into seconds and minutes
+        let seconds = parseInt(diff / 1000) % 60;
+        let minutes = parseInt(diff / 60000);
+        // Transform to a string of two symbols
+        s = checkTime(seconds);
+        m = checkTime(minutes);
+        if (diff < 20000 && parseInt(diff / 500) % 2 === 1) {
+            bkMinute.style.color = "red";
+            bkSecond.style.color = "red";
+            bkMiddle.style.color = "red";
+            bkMinute.style.textShadow = "0 0 1px darkred";
+            bkSecond.style.textShadow = "0 0 1px darkred";
+            bkMiddle.style.textShadow = "0 0 1px darkred";
+        } else {
+            bkMinute.style.color = "white";
+            bkSecond.style.color = "white";
+            bkMiddle.style.color = "white";
+            bkMinute.style.textShadow = "0 0 1px grey";
+            bkSecond.style.textShadow = "0 0 1px grey";
+            bkMiddle.style.textShadow = "0 0 1px grey";
+        }
+    }
+    // Apply the calculated time
+    bkMinute.innerHTML = m;
+    bkSecond.innerHTML = s;
+
+    console.log("Update BK time: " + (new Date() - t1));
 }
 
 function checkTime(i) {
@@ -148,12 +212,16 @@ function spotifyprogress() {
 let backgroundSwitch;
 let busy = false;
 
-function updateCover(cover) {
+function updateCover(cover, backgroundCover=null) {
     let front_background = document.getElementById('global-background-top');
     let back_background = document.getElementById('global-background-back');
     let front_cover = document.getElementById('album-cover-top');
     let back_cover = document.getElementById('album-cover-back');
-    back_background.style.backgroundImage = "url(" + cover + ")";
+    if (backgroundCover === null) {
+        back_background.style.backgroundImage = "url(" + cover + ")";
+    } else {
+        back_background.style.backgroundImage = "url(" + backgroundCover + ")";
+    }
     back_cover.src = cover;
     front_background.style.opacity = '0';
     front_cover.style.opacity = '0';
