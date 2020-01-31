@@ -391,6 +391,94 @@ class Debt extends Slide {
     }
 }
 
+class TopBalance extends Slide {
+    constructor() {
+        super(arguments);
+        this._data = {'names': [], 'amount': []}
+    }
+
+    draw() {
+        let table = "";
+        for (let i = 0; i < Math.min(10, this._data.names.length); i++) {
+            const name = this._data.names[i];
+            const debt = this._data.amount[i];
+            if (i === 0) {
+                table = table + "<tr style='font-size: 48px'>";
+            } else if (i === 1) {
+                table = table + "<tr style='font-size: 40px'>";
+            } else if (i === 2) {
+                table = table + "<tr style='font-size: 32px'>";
+            } else {
+                table = table + "<tr style='font-size: 24px'>";
+            }
+
+            const row = `<td style="text-align: right; width: 48%">${name}</td><td style="width: 4%"></td><td style="text-align: left; width: 48%; color: green;">${debt}</td></tr>`
+            table = table + row;
+        }
+        this.contentBox.innerHTML = `<h1>Rijkste kindjes</h1><table style='width: 100%'>${table}</table>`
+        return true
+    }
+}
+
+class Balance extends Slide {
+    constructor() {
+        super(arguments);
+        this._data = {"names": [], "amount": [], "unparsed": []}
+    }
+
+    draw() {
+        this.contentBox.innerHTML = `<div class="pricelist" id="balancetable"></div>`;
+        const height = document.getElementById("balancetable").offsetHeight;
+        let products = this._data.names.length;
+        if (products % 2 === 1) {
+            products = products + 1;
+            this._data.names.push("");
+            this._data.amount.push("");
+            this._data.unparsed.push(0);
+        }
+
+        let fontSize = parseInt(Math.floor(height / products));
+
+        if (fontSize > 32) {
+            fontSize = 32;
+        }
+
+        let table = "";
+        for (let j = 0; j < 2; j++) {
+            if (j % 2 === 1) {
+                table = table + `<td style="width: 6%"></td>`
+            }
+            table = table + `<td style="width: 47%"><table style="width: 100%;">`;
+
+            for (let i = 0; i < products / 2; i++) {
+                let name = this._data.names[i + j * products / 2];
+                let balanceString = this._data.amount[i + j * products / 2];
+                let balance = this._data.unparsed[i + j * products / 2];
+                if (j % 2 === 0) {
+                    table = table + `<tr><td style='text-align: right;'>${name}</td><td style="width: 5%"></td>`;
+                    if (balance < 0) {
+                        table = table + `<td style='text-align: left; color: red;'>${balanceString}</td></tr>`;
+                    } else {
+                        table = table + `<td style='text-align: left; color: green;'>${balanceString}</td></tr>`;
+                    }
+                } else {
+                    if (balance < 0) {
+                        table = table + `<tr><td style='text-align: right; color: red;'>${balanceString}</td>`
+                    } else {
+                        table = table + `<tr><td style='text-align: right; color: green;'>${balanceString}</td>`
+                    }
+                    table = table + `<td style="width: 5%"></td><td style='text-align: left;'>${name}</td></tr>`;
+                }
+            }
+            table = table + `</table></td>`;
+        }
+
+        this.contentBox.innerHTML = `<h1>Saldo's</h1><div class="pricelist" id="balancetable"><table width="100%" style="font-size: ${fontSize}px"><tr>${table}</tr></table></div>`;
+
+        return true
+    }
+}
+
 class Message extends Slide {
     constructor() {
         super(arguments);
@@ -527,6 +615,8 @@ function initCarousel() {
     slides.RecentlyPlayed = new RecentlyPlayed(contentBox, "Laatst afgespeelde nummers", "");
     slides.Title = new Title(contentBox, "Burgelijke Titels", "");
     slides.Debt = new Debt(contentBox, "Grootste schuld", '');
+    slides.TopBalance = new TopBalance(contentBox, "Rijkste kindjes", '');
+    slides.Balance = new Balance(contentBox, "Saldo's", '');
     slides.PriceList = new PriceList(contentBox, "Drankjes", '');
     slides.Quote = new Quote(contentBox, "Citaat", "");
     slides.Calendar = new Calendar(contentBox, "Kalender", "");
@@ -540,13 +630,15 @@ function initCarousel() {
     slides.PriceList.next = slides.DrankTonight;
     slides.DrankTonight.next = slides.Calendar;
     slides.Calendar.next = slides.MostDrank1;
-    slides.MostDrank1.next = slides.Quote;
+    slides.MostDrank1.next = slides.Balance;
+    slides.Balance.next = slides.Quote;
     slides.Quote.next = slides.MostDrank2;
     slides.MostDrank2.next = slides.Debt;
     slides.Debt.next = slides.MostDrank3;
     slides.MostDrank3.next = slides.RecentlyPlayed;
     slides.RecentlyPlayed.next = slides.Title;
-    slides.Title.next = slides.PriceList;
+    slides.Title.next = slides.TopBalance;
+    slides.TopBalance.next = slides.PriceList;
 
 
     carousel = new Carousel();
