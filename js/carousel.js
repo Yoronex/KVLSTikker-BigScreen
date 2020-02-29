@@ -1,4 +1,4 @@
-const slideTime = 2000; // ms
+const slideTime = 20000; // ms
 
 /**
  * @class Carousel
@@ -552,15 +552,19 @@ class Calendar extends Slide {
 
         let content = "";
         let name, date, days;
-        if (this._data.upcoming_events) {
-            for (let i = 0; i < this._data.calendar.length; i++) {
-                name = this._data.calendar[i].name;
-                date = this._data.calendar[i].date;
-                days = this._data.calendar[i].days;
-                content = content + `<tr><td style="text-align: right; min-width: 250px; vertical-align: top;">${date}</td><td style="width: 5%"><td style="text-align: left; width: 180px; vertical-align: top;">(${days} dagen)</td><td style="text-align: left;">${name}</td></tr>`
+        if ('upcoming_events' in this._data) {
+            if (this._data.upcoming_events) {
+                for (let i = 0; i < this._data.calendar.length; i++) {
+                    name = this._data.calendar[i].name;
+                    date = this._data.calendar[i].date;
+                    days = this._data.calendar[i].days;
+                    content = content + `<tr><td style="text-align: right; min-width: 250px; vertical-align: top;">${date}</td><td style="width: 5%"><td style="text-align: left; width: 180px; vertical-align: top;">(${days} dagen)</td><td style="text-align: left;">${name}</td></tr>`
+                }
+            } else {
+                content = `<tr><td style="text-align: center;">Er zijn geen aankomende activiteiten :(</td></tr>`
             }
         } else {
-            content = `<tr><td style="text-align: center;">Er zijn geen aankomende activiteiten :(</td></tr>`
+            content = `<tr><td style="text-align: center;"><i>Kan kalender niet downloaden (is er internet?)</i></td></tr>`
         }
 
         const post = `</table>`;
