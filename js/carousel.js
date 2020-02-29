@@ -1,4 +1,4 @@
-const slideTime = 2000; // ms
+const slideTime = 20000; // ms
 
 /**
  * @class Carousel
