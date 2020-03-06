@@ -124,6 +124,7 @@ class DrankTonight extends Slide {
                         ticks: {
                             beginAtZero: true,
                             fontSize: 30,
+                            callback: function(value) {if (value % 1 === 0) {return value;}}
                         }
                     }],
                     xAxes: [{
@@ -174,6 +175,7 @@ class MostDrank1 extends Slide {
                         ticks: {
                             beginAtZero: true,
                             fontSize: 30,
+                            callback: function(value) {if (value % 1 === 0) {return value;}}
                         }
                     }],
                     xAxes: [{
@@ -224,6 +226,7 @@ class MostDrank2 extends Slide {
                         ticks: {
                             beginAtZero: true,
                             fontSize: 30,
+                            callback: function(value) {if (value % 1 === 0) {return value;}}
                         }
                     }],
                     xAxes: [{
@@ -274,6 +277,7 @@ class MostDrank3 extends Slide {
                         ticks: {
                             beginAtZero: true,
                             fontSize: 30,
+                            callback: function(value) {if (value % 1 === 0) {return value;}}
                         }
                     }],
                     xAxes: [{
@@ -677,7 +681,7 @@ function initCarousel() {
 
 
     carousel = new Carousel();
-    carousel.state = slides.Birthdays;
+    carousel.state = slides.PriceList;
     return carousel.state.constructor.name
 }
 
