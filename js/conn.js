@@ -15,6 +15,7 @@ let loading = true;
 
 socket.on('connect', function() {
     connected = true;
+    setTikkerOnline();
     console.log('Connected to Tikker!');
 
     if (loading) {
@@ -33,6 +34,7 @@ socket.on('connect', function() {
 
 socket.on('disconnect', function() {
     connected = false;
+    setTikkerOffline();
     console.log('Connection with Tikker lost')
 });
 
@@ -181,4 +183,22 @@ function biertje_kwartiertje_exec() {
 function showError() {
     document.getElementById('loading-error').style.visibility = "visible";
 
+}
+
+function setTikkerOffline() {
+    let circle = document.getElementById('status-dot');
+    let status_text = document.getElementById('status-text');
+    circle.style.backgroundColor = 'red';
+    circle.classList.remove("pulsation");
+    status_text.style.color = 'red';
+    status_text.innerHTML = "Tikker offline";
+}
+
+function setTikkerOnline() {
+    let circle = document.getElementById('status-dot');
+    let status_text = document.getElementById('status-text');
+    circle.style.backgroundColor = 'green';
+    circle.classList.add("pulsation");
+    status_text.style.color = 'green';
+    status_text.innerHTML = "Tikker online";
 }
