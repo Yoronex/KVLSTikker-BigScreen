@@ -353,3 +353,11 @@ img {
     padding: 20px;
     text-align: center;
 }
+
+.loading-error {
+    color: red;
+    width: 800px;
+    margin: 30px 30px 30px -400px;
+    font-size: 20px;
+    visibility: hidden;
+}

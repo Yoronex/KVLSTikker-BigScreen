@@ -8,6 +8,34 @@ let currentSpotifyTrackEnd = new Date();
 let currentSpotifyTrackLength = 1;
 let currentSpotifyTrackPlaying = false;
 
+let errorTimeout;
+let connected = false;
+let connectedOnce = false;
+let loading = true;
+
+socket.on('connect', function() {
+    connected = true;
+    console.log('Connected to Tikker!');
+
+    if (loading) {
+        if (connectedOnce) {
+            location.reload();
+        } else {
+            clearTimeout(errorTimeout);
+            let error = document.getElementById('loading-error');
+            error.style.visibility = "hidden";
+            error.innerHTML = `<i>Weet je zeker dat Tikker geen foutmeldingen laat zien in de console?</i>`;
+            errorTimeout = setTimeout(showError, 5000);
+            connectedOnce = true;
+        }
+    }
+});
+
+socket.on('disconnect', function() {
+    connected = false;
+    console.log('Connection with Tikker lost')
+});
+
 socket.on('my response', function(msg) {
     $('#contentblock').append('<p>Received: ' + msg.data + '</p>');
 });
@@ -85,6 +113,7 @@ socket.on('slide_interrupt', function(msg) {
 socket.on('init', function(msg) {
     console.log(msg);
     console.log("received init response");
+    clearTimeout(errorTimeout);
     if (msg.snow === false) {
         snowStorm.stop();
     }
@@ -104,6 +133,7 @@ socket.on('init', function(msg) {
     }
 
     setTimeout(hideLoading, 1500);
+    loading = false;
     console.log("finished initialization")
 });
 
@@ -131,7 +161,8 @@ socket.on('biertje_kwartiertje_stop', function() {
 
 function initFromTikker(slideName) {
     console.log("send init request");
-    socket.emit('init', {"slide_name": slideName, "slide_time": slideTime / 1000})
+    socket.emit('init', {"slide_name": slideName, "slide_time": slideTime / 1000});
+    errorTimeout = setTimeout(showError, 5000);
 }
 
 function updateSlideData(name) {
@@ -145,4 +176,9 @@ function spotify_send_update() {
 
 function biertje_kwartiertje_exec() {
     socket.emit('biertje_kwartiertje_exec');
+}
+
+function showError() {
+    document.getElementById('loading-error').style.visibility = "visible";
+
 }
