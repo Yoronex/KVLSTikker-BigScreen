@@ -94,7 +94,17 @@ socket.on('init', function(msg) {
     runCarouselObj();
     spotify_send_update();
     spotifyprogress();
+
+    let name;
+    let slideNames = Object.keys(slides);
+    // Loop over all slides and send a request for their current data
+    for (let i = 0; i < slideNames.length; i++) {
+        name = slides[slideNames[i]].constructor.name;
+        updateSlideData(name);
+    }
+
     setTimeout(hideLoading, 1500);
+    console.log("finished initialization")
 });
 
 socket.on('stats', function(msg) {
