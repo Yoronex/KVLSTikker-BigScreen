@@ -63,15 +63,21 @@
 
 #track-progress-bar {
     display: inline-block;
+    width: 900px;
+}
+
+.progress-bar {
     background-color: #f1f1f1;
     border-radius: 13px; /* (height of inner div) / 2 + padding */
     padding: 1px;
-    width: 900px;
     margin-left: 15px;
     margin-right: 15px;
 }
 
 #track-progress-bar > div {
+}
+
+.progress-bar > div.progress-bar-inner {
     background-color: #0b8337;
     width: 100%; /* Adjust with JavaScript */
     height: 14px;

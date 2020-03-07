@@ -31,7 +31,7 @@
                 <div class="tikker-status">
                     <div class="server-status">
                         <span class="status-dot pulsation" id="status-dot" style="background-color: green;"></span>
-                        <span style="color: green; vertical-align: middle" id="status-text">  Tikker online</span>
+                        <span style="color: green;" id="status-text">  Tikker online</span>
                     </div>
                 </div>
             </div>
@@ -145,8 +145,8 @@
                 <tr>
                     <td colspan="2" class="track-progress">
                         <span id="track-current-time">1:00</span>
-                        <div id="track-progress-bar">
-                            <div id="track-progress-bar-inner"></div>
+                        <div class="progress-bar" id="track-progress-bar">
+                            <div class="progress-bar-inner" id="track-progress-bar-inner"></div>
                         </div>
                         <span id="track-end-time">4:00</span>
                     </td>
@@ -161,7 +161,10 @@
         <div class="loading-text">
             <div class="tikker-title">Tikker</div>
             <div class="tikker-subtitle">BigScreen</div>
-        <div>
+        </div>
+        <div class="loading-error" id="loading-error">
+            <i>Weet je zeker dat Tikker online is?</i>
+        </div>
     </div>
 </div>
 </body>

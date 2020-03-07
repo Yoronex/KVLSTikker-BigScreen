@@ -124,6 +124,7 @@ class DrankTonight extends Slide {
                         ticks: {
                             beginAtZero: true,
                             fontSize: 30,
+                            callback: function(value) {if (value % 1 === 0) {return value;}}
                         }
                     }],
                     xAxes: [{
@@ -174,6 +175,7 @@ class MostDrank1 extends Slide {
                         ticks: {
                             beginAtZero: true,
                             fontSize: 30,
+                            callback: function(value) {if (value % 1 === 0) {return value;}}
                         }
                     }],
                     xAxes: [{
@@ -224,6 +226,7 @@ class MostDrank2 extends Slide {
                         ticks: {
                             beginAtZero: true,
                             fontSize: 30,
+                            callback: function(value) {if (value % 1 === 0) {return value;}}
                         }
                     }],
                     xAxes: [{
@@ -274,6 +277,7 @@ class MostDrank3 extends Slide {
                         ticks: {
                             beginAtZero: true,
                             fontSize: 30,
+                            callback: function(value) {if (value % 1 === 0) {return value;}}
                         }
                     }],
                     xAxes: [{
@@ -573,6 +577,35 @@ class Calendar extends Slide {
     }
 }
 
+class Birthdays extends Slide {
+    constructor() {
+        super(arguments);
+        this._data = [];
+    }
+
+    draw() {
+        const pre = `<h1>Verjaardagskalender</h1></h1><table style="width: 100%;">`;
+
+        let content = "";
+        let name, date, days, age;
+        if (this._data.length > 0) {
+            for (let i = 0; i < this._data.length; i++) {
+                name = this._data[i].user;
+                date = this._data[i].birthday;
+                days = this._data[i].days;
+                age = this._data[i].age;
+                content = content + `<tr><td style="text-align: right; min-width: 250px; vertical-align: top;">${date}</td><td style="width: 5%"><td style="text-align: left; width: 180px; vertical-align: top;">(${days} dagen)</td><td style="text-align: left;">${name} wordt ${age} jaar!</td></tr>`
+            }
+        } else {
+            content = `<tr><td style="text-align: center;">Niemand is binnenkort jarig :(</td></tr>`
+        }
+
+        const post = `</table>`;
+        this.contentBox.innerHTML = pre + content + post;
+        return true
+    }
+}
+
 /**
  * supportive functions
  */
@@ -624,6 +657,7 @@ function initCarousel() {
     slides.PriceList = new PriceList(contentBox, "Drankjes", '');
     slides.Quote = new Quote(contentBox, "Citaat", "");
     slides.Calendar = new Calendar(contentBox, "Kalender", "");
+    slides.Birthdays = new Birthdays(contentBox, "Verjaardagskalender", "");
 
     slides.Message = new Message(contentBox, "Bericht", '');
 
@@ -638,7 +672,8 @@ function initCarousel() {
     slides.Balance.next = slides.Quote;
     slides.Quote.next = slides.MostDrank2;
     slides.MostDrank2.next = slides.Debt;
-    slides.Debt.next = slides.MostDrank3;
+    slides.Debt.next = slides.Birthdays;
+    slides.Birthdays.next = slides.MostDrank3;
     slides.MostDrank3.next = slides.RecentlyPlayed;
     slides.RecentlyPlayed.next = slides.Title;
     slides.Title.next = slides.TopBalance;
@@ -646,7 +681,7 @@ function initCarousel() {
 
 
     carousel = new Carousel();
-    carousel.state = slides.Calendar;
+    carousel.state = slides.PriceList;
     return carousel.state.constructor.name
 }
 

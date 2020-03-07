@@ -4,7 +4,6 @@ let bkStarted = false;
 
 function startFunctions() {
     updateClocks();
-    pingTikker();
     initFromTikker(
         initCarousel()
     );
@@ -97,68 +96,6 @@ function checkTime(i) {
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-var alreadyoffline = false;
-
-function pingTikker() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', tikkerUrl + '/api/ping', true);
-    xhr.timeout = 2000;
-    xhr.setRequestHeader("Access-Control-Allow-Origin", tikkerUrl);
-    var circle = document.getElementById('status-dot');
-    var status_text = document.getElementById('status-text');
-
-    xhr.onload = function() {
-        circle.style.backgroundColor = 'green';
-        circle.classList.add("pulsation");
-        status_text.style.color = 'green';
-        status_text.innerHTML = "Tikker online";
-        if (alreadyoffline) {
-            alreadyoffline = false;
-            circle.style.backgroundColor = 'green';
-            circle.classList.add("pulsation");
-            status_text.style.color = 'green';
-            status_text.innerHTML = "Tikker online";
-        }
-    };
-    xhr.ontimeout = function(e) {
-        if (!alreadyoffline) {
-            alreadyoffline = true;
-            circle.style.backgroundColor = 'red';
-            circle.classList.remove("pulsation");
-            status_text.style.color = 'red';
-            status_text.innerHTML = "Tikker offline";
-        }
-    };
-
-    xhr.send(null);
-    var t = setTimeout(pingTikker, 15000);
-}
-
-function setTikkerOnline() {
-    var circle = document.getElementById('status-dot');
-    var status_text = document.getElementById('status-text');
-    if (alreadyoffline) {
-        alreadyoffline = false;
-        circle.style.backgroundColor = 'green';
-        circle.classList.add("pulsation");
-        status_text.style.color = 'green';
-        status_text.innerHTML = "Tikker online";
-    }
-}
-
-function setTikkerOffline() {
-    var circle = document.getElementById('status-dot');
-    var status_text = document.getElementById('status-text');
-    if (!alreadyoffline) {
-        alreadyoffline = true;
-        circle.style.backgroundColor = 'red';
-        circle.classList.remove("pulsation");
-        status_text.style.color = 'red';
-        status_text.innerHTML = "Tikker offline";
-    }
-}
-
 
 function millisToMinutesAndSeconds(millis) {
     var minutes = Math.floor(millis / 60000);
