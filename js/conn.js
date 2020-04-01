@@ -13,6 +13,8 @@ let connected = false;
 let connectedOnce = false;
 let loading = true;
 
+let backgroundFire = false;
+
 socket.on('connect', function() {
     connected = true;
     setTikkerOnline();
@@ -145,6 +147,27 @@ socket.on('stats', function(msg) {
 
 socket.on('snow', function() {
     snowStorm.stop();
+});
+
+socket.on('fireplace', function () {
+    let video = document.getElementById('background-video');
+    let background = document.getElementById('background-video-background');
+    if (!backgroundFire) {
+        let source = document.getElementById('background-video-source');
+        if (source.src !== 'videos/fireplace.mp4') {
+            source.src = 'videos/fireplace.mp4';
+            video.load();
+        }
+        video.play();
+        video.style.opacity = '1';
+        background.style.opacity = '1';
+        backgroundFire = true;
+    } else {
+        video.pause();
+        video.style.opacity = '0';
+        background.style.opacity = '0';
+        backgroundFire = false;
+    }
 });
 
 socket.on('reload', function() {
