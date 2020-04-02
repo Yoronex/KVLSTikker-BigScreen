@@ -121,6 +121,10 @@ function spotifyprogress() {
         document.getElementById("track-current-time").innerHTML = millisToMinutesAndSeconds(currentSpotifyTrackProgressCalced);
         document.getElementById("track-progress-bar-inner").style.width = perc + "%";
 
+        if (backgroundVideoClip) {
+            setVideoClipBackground(currentSpotifyTrackProgressCalced);
+        }
+
         if (pdiff > 500) {
             recordedSpotifyTrackEnd = currentSpotifyTrackEnd;
             let progessbar = document.getElementById("track-progress-bar-inner");
@@ -172,6 +176,51 @@ function updateCoverPt2() {
     front_background.style.opacity = '1';
     front_cover.style.opacity = '1';
     backgroundSwitch = null;
+}
+
+function openVideoClipBackground(source) {
+    let video = document.getElementById('background-video');
+    let background = document.getElementById('background-video-background');
+    document.getElementById('background-video-source').src = source;
+    video.load();
+    video.play();
+    video.style.opacity = '1';
+    background.style.opacity = '1';
+    backgroundVideoClip = true;
+}
+
+function pauseVideoClipBackground(pause) {
+    let video = document.getElementById('background-video');
+    if (pause) {
+        video.pause()
+    } else {
+        video.play()
+    }
+}
+
+function setVideoClipBackground(milliseconds) {
+    const seconds = milliseconds / 1000.0;
+    console.log(seconds);
+    let video = document.getElementById('background-video');
+    if ((seconds < video.duration) && (Math.abs(video.currentTime - seconds) > 0.2)) {
+        console.log('changed video time');
+        video.currentTime = seconds;
+    }
+}
+
+function hideVideoClipBackground() {
+    let video = document.getElementById('background-video');
+    let background = document.getElementById('background-video-background');
+    video.pause();
+    video.style.opacity = '0';
+    background.style.opacity = '0';
+    backgroundVideoClip = false;
+    resetVideoBackground();
+}
+
+function resetVideoBackground() {
+    document.getElementById('background-video-source').src = 'videos/fireplace.mp4';
+    document.getElementById('background-video').load();
 }
 
 (function($) {
