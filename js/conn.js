@@ -171,20 +171,14 @@ socket.on('snow', function() {
 });
 
 socket.on('fireplace', function () {
-    let video = document.getElementById('background-video');
-    let background = document.getElementById('background-video-background');
     if (!backgroundFire) {
         if (backgroundVideoClip) {
             hideVideoClipBackground();
         }
-        video.play();
-        video.style.opacity = '1';
-        background.style.opacity = '1';
+        showVideoBackground();
         backgroundFire = true;
     } else {
-        video.pause();
-        video.style.opacity = '0';
-        background.style.opacity = '0';
+        hideVideoBackground();
         backgroundFire = false;
     }
 });

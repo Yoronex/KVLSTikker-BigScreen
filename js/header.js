@@ -179,13 +179,9 @@ function updateCoverPt2() {
 }
 
 function openVideoClipBackground(source) {
-    let video = document.getElementById('background-video');
-    let background = document.getElementById('background-video-background');
     document.getElementById('background-video-source').src = source;
-    video.load();
-    video.play();
-    video.style.opacity = '1';
-    background.style.opacity = '1';
+    document.getElementById('background-video').load();
+    showVideoBackground();
     backgroundVideoClip = true;
 }
 
@@ -209,11 +205,7 @@ function setVideoClipBackground(milliseconds) {
 }
 
 function hideVideoClipBackground() {
-    let video = document.getElementById('background-video');
-    let background = document.getElementById('background-video-background');
-    video.pause();
-    video.style.opacity = '0';
-    background.style.opacity = '0';
+    hideVideoBackground();
     backgroundVideoClip = false;
     resetVideoBackground();
 }
@@ -221,6 +213,22 @@ function hideVideoClipBackground() {
 function resetVideoBackground() {
     document.getElementById('background-video-source').src = 'videos/fireplace.mp4';
     document.getElementById('background-video').load();
+}
+
+function showVideoBackground() {
+    let video = document.getElementById('background-video');
+    video.play();
+    video.style.opacity = '1';
+    document.getElementById('background-video-background').style.opacity = '1';
+    document.getElementById('background-darken-filter').style.opacity = '0.2';
+}
+
+function hideVideoBackground() {
+    let video = document.getElementById('background-video');
+    video.pause();
+    video.style.opacity = '0';
+    document.getElementById('background-video-background').style.opacity = '0';
+    document.getElementById('background-darken-filter').style.opacity = '0.5'
 }
 
 (function($) {
