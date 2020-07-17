@@ -145,6 +145,7 @@ socket.on('init', function(msg) {
     slides[msg.slide.name].data = msg.slide.data;
     updateSpotify(msg.spotify);
     updateDailyStats(msg.stats.daily, msg.stats.max);
+    startBK(msg.biertje_kwartiertje.minutes * 60 * 1000);
     runCarouselObj();
     spotify_send_update();
     spotifyprogress();
