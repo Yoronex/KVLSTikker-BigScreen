@@ -681,7 +681,7 @@ function initCarousel() {
 
 
     carousel = new Carousel();
-    carousel.state = slides.PriceList;
+    carousel.state = slides.Quote;
     return carousel.state.constructor.name
 }
 

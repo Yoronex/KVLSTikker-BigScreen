@@ -13,6 +13,9 @@ let connected = false;
 let connectedOnce = false;
 let loading = true;
 
+let backgroundFire = false;
+let backgroundVideoClip = false;
+
 socket.on('connect', function() {
     connected = true;
     setTikkerOnline();
@@ -56,6 +59,13 @@ function updateSpotify(msg) {
         document.getElementById('spotify-user').innerHTML = msg['user'];
         document.getElementById('spotify-logo').style.visibility = "visible";
         currentSpotifyTrackProgress = msg.data['progress_ms'];
+
+        if (backgroundVideoClip && currentSpotifyTrackPlaying && !msg.data['is_playing']) {
+            pauseVideoClipBackground(true);
+        } else if (backgroundVideoClip && !currentSpotifyTrackPlaying && msg.data['is_playing']) {
+            pauseVideoClipBackground(false);
+        }
+
         currentSpotifyTrackPlaying = msg.data['is_playing'];
 
         if (msg.data['currently_playing_type'] === "track") {
@@ -63,6 +73,12 @@ function updateSpotify(msg) {
             currentSpotifyTrackEnd = new Date(currentSpotifyTrackEnd.getTime() + msg.data.item['duration_ms'] - msg.data['progress_ms']);
 
             if (currentSpotifyTrack !== msg.data.item.id) {
+                if (!msg.data.video && backgroundVideoClip) {
+                    hideVideoClipBackground()
+                } else if (msg.data.video && !backgroundFire) {
+                    openVideoClipBackground(tikkerUrl + "/static/videos/" + msg.data.item.id + ".mp4");
+                }
+
                 currentSpotifyTrack = msg.data.item.id;
                 currentSpotifyTrackLength = msg.data.item['duration_ms'];
                 $('#track-title').html(msg.data.item.name);
@@ -73,8 +89,7 @@ function updateSpotify(msg) {
                 $('#track-artist').html(trackArtists.substring(0, trackArtists.length - 2));
 
                 let cover = tikkerUrl + "/static/covers/" + msg.data.item.album.id + ".jpg";
-                /*document.getElementById("global-background-top").style.backgroundImage = "url(" + cover + ")";
-                document.getElementById("album-cover-top").src = cover;*/
+
                 updateCover(cover);
             }
 
@@ -88,12 +103,20 @@ function updateSpotify(msg) {
             currentSpotifyTrackLength = msg.data['progress_ms'] + spotifyRefreshTime;
             $('#track-title').html(defaultPodcastTitle);
             $('#track-artist').html(defaultPodcastArtist);
+
+            if (backgroundVideoClip) {
+                hideVideoClipBackground()
+            }
         }
 
     } else {
         document.getElementById('spotify-logo').style.visibility = "hidden";
         $('#track-title').html(defaultTitle);
         $('#track-artist').html(defaultArtist);
+
+        if (backgroundVideoClip) {
+            hideVideoClipBackground()
+        }
     }
 }
 
@@ -122,6 +145,7 @@ socket.on('init', function(msg) {
     slides[msg.slide.name].data = msg.slide.data;
     updateSpotify(msg.spotify);
     updateDailyStats(msg.stats.daily, msg.stats.max);
+    startBK(msg.biertje_kwartiertje.minutes * 60 * 1000);
     runCarouselObj();
     spotify_send_update();
     spotifyprogress();
@@ -145,6 +169,19 @@ socket.on('stats', function(msg) {
 
 socket.on('snow', function() {
     snowStorm.stop();
+});
+
+socket.on('fireplace', function () {
+    if (!backgroundFire) {
+        if (backgroundVideoClip) {
+            hideVideoClipBackground();
+        }
+        showVideoBackground();
+        backgroundFire = true;
+    } else {
+        hideVideoBackground();
+        backgroundFire = false;
+    }
 });
 
 socket.on('reload', function() {

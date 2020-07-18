@@ -62,10 +62,11 @@ h1 {
     opacity: 0.5;
     z-index: -1;
     background-color: black;
+    transition: opacity 1s;
 }
 
 .img-bot {
-    z-index: -3;
+    z-index: -5;
     opacity: 1;
     position: absolute
 }
@@ -75,8 +76,53 @@ h1 {
     opacity: 1;
     -webkit-transition: opacity 1s;
     transition: opacity 1s;
-    z-index: -2;
+    z-index: -4;
     position: absolute
+}
+
+.video-container-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -3;
+    background-color: black;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.video-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -2;
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
+}
+
+.video-container video {
+    /* Make video to at least 100% wide and tall */
+    min-width: 100%;
+    min-height: 100%;
+
+    /* Setting width & height to auto prevents the browser from stretching or squishing the video */
+    width: auto;
+    height: auto;
+
+    /* Center the video */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+
+    opacity: 0;
+    transition: opacity 1s;
 }
 
 @keyframes move-wallpaper {

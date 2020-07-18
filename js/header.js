@@ -121,6 +121,10 @@ function spotifyprogress() {
         document.getElementById("track-current-time").innerHTML = millisToMinutesAndSeconds(currentSpotifyTrackProgressCalced);
         document.getElementById("track-progress-bar-inner").style.width = perc + "%";
 
+        if (backgroundVideoClip) {
+            setVideoClipBackground(currentSpotifyTrackProgressCalced);
+        }
+
         if (pdiff > 500) {
             recordedSpotifyTrackEnd = currentSpotifyTrackEnd;
             let progessbar = document.getElementById("track-progress-bar-inner");
@@ -172,6 +176,59 @@ function updateCoverPt2() {
     front_background.style.opacity = '1';
     front_cover.style.opacity = '1';
     backgroundSwitch = null;
+}
+
+function openVideoClipBackground(source) {
+    document.getElementById('background-video-source').src = source;
+    document.getElementById('background-video').load();
+    showVideoBackground();
+    backgroundVideoClip = true;
+}
+
+function pauseVideoClipBackground(pause) {
+    let video = document.getElementById('background-video');
+    if (pause) {
+        video.pause()
+    } else {
+        video.play()
+    }
+}
+
+function setVideoClipBackground(milliseconds) {
+    const seconds = milliseconds / 1000.0;
+    console.log(seconds);
+    let video = document.getElementById('background-video');
+    if ((seconds < video.duration) && (Math.abs(video.currentTime - seconds) > 0.2)) {
+        console.log('changed video time');
+        video.currentTime = seconds;
+    }
+}
+
+function hideVideoClipBackground() {
+    hideVideoBackground();
+    backgroundVideoClip = false;
+    resetVideoBackground();
+}
+
+function resetVideoBackground() {
+    document.getElementById('background-video-source').src = 'videos/fireplace.mp4';
+    document.getElementById('background-video').load();
+}
+
+function showVideoBackground() {
+    let video = document.getElementById('background-video');
+    video.play();
+    video.style.opacity = '1';
+    document.getElementById('background-video-background').style.opacity = '1';
+    document.getElementById('background-darken-filter').style.opacity = '0.2';
+}
+
+function hideVideoBackground() {
+    let video = document.getElementById('background-video');
+    video.pause();
+    video.style.opacity = '0';
+    document.getElementById('background-video-background').style.opacity = '0';
+    document.getElementById('background-darken-filter').style.opacity = '0.5'
 }
 
 (function($) {
