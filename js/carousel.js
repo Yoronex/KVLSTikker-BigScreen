@@ -293,6 +293,37 @@ class MostDrank3 extends Slide {
 }
 
 /**
+ * @class DrinkingScore
+ * @description The current drinking score, translated into human speech
+ */
+class DrinkingScore extends Slide {
+    constructor() {
+        super(arguments);
+        this._data = null;
+    }
+
+    draw() {
+        const percentage = 100 - parseFloat(document.getElementById('score-bar-inner').style.top)
+        let message = ""
+        if (percentage === 0) {
+            return false
+        } else if (percentage < 10) {
+            message = "We hadden net zo goed cola kunnen drinken"
+        } else if (percentage < 25) {
+            message = "Eén kleintje dan"
+        } else if (percentage < 50) {
+            message = "Keurige borrel"
+        } else if (percentage < 75) {
+            message = "Er wordt stevig gezopen!"
+        } else {
+            message = "Er wordt zeer, zeer, zeer goed gezopen! Kathelijn kan trots zijn!"
+        }
+        this.contentBox.innerHTML = `<h1>Hoe hard wordt er gezopen?</h1><div id="quote" style="font-size: 30px; height: 50%; padding: 30px"><table style="width: 100%; height: 100%"><tr><td style="vertical-align: center; font-size: 32px"><i>${message}</i></td></tr></table></div>`;
+        return true
+    }
+}
+
+/**
  * @class PriceList
  * @description Table of prices of all available products
  */
@@ -658,6 +689,7 @@ function initCarousel() {
     slides.Quote = new Quote(contentBox, "Citaat", "");
     slides.Calendar = new Calendar(contentBox, "Kalender", "");
     slides.Birthdays = new Birthdays(contentBox, "Verjaardagskalender", "");
+    slides.DrinkingScore = new DrinkingScore(contentBox, "Hoe hard wordt er gezopen?", "")
 
     slides.Message = new Message(contentBox, "Bericht", '');
 
@@ -665,7 +697,8 @@ function initCarousel() {
         "labels": ['Bier', 'Apfelkorn', 'Cola'],
         "data": [10, 4, 7]};*/
 
-    slides.PriceList.next = slides.DrankTonight;
+    slides.PriceList.next = slides.DrinkingScore;
+    slides.DrinkingScore.next = slides.DrankTonight
     slides.DrankTonight.next = slides.Calendar;
     slides.Calendar.next = slides.MostDrank1;
     slides.MostDrank1.next = slides.Balance;

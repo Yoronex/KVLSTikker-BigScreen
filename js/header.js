@@ -360,3 +360,13 @@ function hideLoading() {
 function hideLoadingInvis() {
     document.getElementById('loading-screen').style.visibility = 'hidden';
 }
+
+function initDrinkingScore() {
+    const bar = document.getElementById('score-bar-inner');
+    bar.style.transition = `top ${drinkingScoreRefreshTime / 1000}s`
+}
+
+function setDrinkingScore(percentage) {
+    const bar = document.getElementById('score-bar-inner');
+    bar.style.top = Math.max(100 - percentage, 0) + '%';
+}
