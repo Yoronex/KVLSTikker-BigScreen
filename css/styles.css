@@ -236,7 +236,9 @@ h1 {
 
 .score-bar-animation {
     animation-name: flicker-red-green;
-    animation-duration: 4s;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
 }
 
 @keyframes flicker-red-green {
