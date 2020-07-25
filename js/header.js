@@ -369,4 +369,9 @@ function initDrinkingScore() {
 function setDrinkingScore(percentage) {
     const bar = document.getElementById('score-bar-inner');
     bar.style.top = Math.max(100 - percentage, 0) + '%';
+    if (percentage >= 75) {
+        bar.classList.add('score-bar-animation')
+    } else {
+        bar.classList.remove('score-bar-animation')
+    }
 }
