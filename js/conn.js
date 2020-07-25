@@ -1,6 +1,7 @@
 var tikkerUrl = "http://127.0.0.1:5000";
 var socket = io(tikkerUrl + "/bigscreen");
 var spotifyRefreshTime = 5000;  // ms
+let drinkingScoreRefreshTime = 60 * 1000;  // ms
 
 let currentSpotifyTrack = "";
 let currentSpotifyTrackProgress = 1;
@@ -145,7 +146,10 @@ socket.on('init', function(msg) {
     slides[msg.slide.name].data = msg.slide.data;
     updateSpotify(msg.spotify);
     updateDailyStats(msg.stats.daily, msg.stats.max);
-    startBK(msg.biertje_kwartiertje.minutes * 60 * 1000);
+    if (msg.biertje_kwartiertje.enabled === true) {
+        startBK(msg.biertje_kwartiertje.minutes * 60 * 1000);
+    }
+    setDrinkingScore(msg.drinking_score_percentage);
     runCarouselObj();
     spotify_send_update();
     spotifyprogress();
@@ -158,6 +162,8 @@ socket.on('init', function(msg) {
         updateSlideData(name);
     }
 
+    setTimeout(initDrinkingScore, 1000);
+    setTimeout(loopDrinkingScore, drinkingScoreRefreshTime);
     setTimeout(hideLoading, 1500);
     loading = false;
     console.log("finished initialization")
@@ -198,6 +204,10 @@ socket.on('biertje_kwartiertje_stop', function() {
     bkStarted = false;
 });
 
+socket.on('drinking_score', function(msg) {
+    setDrinkingScore(msg.percentage);
+});
+
 function initFromTikker(slideName) {
     console.log("send init request");
     socket.emit('init', {"slide_name": slideName, "slide_time": slideTime / 1000});
@@ -215,6 +225,11 @@ function spotify_send_update() {
 
 function biertje_kwartiertje_exec() {
     socket.emit('biertje_kwartiertje_exec');
+}
+
+function loopDrinkingScore() {
+    socket.emit('get_drinking_score');
+    setTimeout(loopDrinkingScore, drinkingScoreRefreshTime);
 }
 
 function showError() {

@@ -209,9 +209,39 @@ h1 {
     border-right: 4px solid black;
 }
 
+.screen-middle {
+    float: left;
+    width: 1426px;
+}
+
 .screen-right {
-    width: 1436px;
-    float: right;
+    width: 6px;
+    float: left;
+    height: 100%;
+}
+
+.score-bar-outer {
+    height: 100%;
+    width: 100%;
+}
+
+.score-bar-inner {
+    height: 200%;
+    width: 200%;
+    background-color: #0b8337;
+    top: 100%;
+    position: relative;
+    box-shadow: -3px -3px 15px 3px black;
+}
+
+.score-bar-animation {
+    animation-name: flicker-red-green;
+    animation-duration: 4s;
+}
+
+@keyframes flicker-red-green {
+    from  {background-color: darkred}
+    to {background-color: #0b8337}
 }
 
 .header {
