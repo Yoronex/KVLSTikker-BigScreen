@@ -11,12 +11,12 @@ body, html {
     text-shadow: 0 0 1px grey;
 }
 
-* {
-    /*box-sizing: border-box;*/
-}
-
 h1 {
     font-size: 52px;
+}
+
+.box-sizing {
+    box-sizing: border-box;
 }
 
 .bg-image {
@@ -384,9 +384,36 @@ img {
     height: 640px;
 }
 
+.slide-progress-bar {
+    width: 1276px;
+    height: 12px;
+}
+
+.slide-progress-bar-outer {
+    height: 100%;
+    width: 33%;
+    padding: 4px;
+    float: left;
+}
+
+.slide-progress-bar-inner {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+}
+
+.slide-progress-bar-animation {
+    height: 100%;
+    width: 0;
+    background-color: white;
+    border-radius: 2px;
+}
+
 .content {
     width: 1276px;
     height: 640px;
+    margin-top: -12px;
     font-size: 32px;
     text-align: center;
     overflow: hidden;

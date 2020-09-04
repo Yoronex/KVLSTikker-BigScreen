@@ -1,4 +1,5 @@
-const slideTime = 20000; // ms
+const slideTime = 5000; // ms
+const firstSlide = "PriceList";
 
 /**
  * @class Carousel
@@ -6,11 +7,16 @@ const slideTime = 20000; // ms
 
 class Carousel {
     constructor(state) {
+        this._nextState = state;
         this._state = state;
     }
 
-    set state(state) {
+    /*set state(state) {
         this._state = state
+    }*/
+
+    set nextState(state) {
+        this._nextState = state
     }
 
     get state() {
@@ -18,24 +24,67 @@ class Carousel {
     }
 
     run() {
-        if (!this._state.draw()) {
-            this._state.getNext(this);
+        let slideNr = slidesOrdered.indexOf(this._nextState);
+        // If the slide number is -1, the slide is not in the list and thus it must be an interrupt
+        // We therefore get the number of the current slide
+        if (slideNr === -1) {
+            slideNr = (slidesOrdered.indexOf(this._state) - 1 + slidesOrdered.length) % slidesOrdered.length;
+        }
+        // If this slide is first in the sequence, we have to reset all the progress bars in the carousel
+        if (slideNr === 0) {
+            this.resetProgressColors();
+        }
+
+        if (!this._nextState.draw()) {
+            this._nextState.getNext(this);
             this.update_data();
             this.run();
+            this.startProgressAnimation(slideNr, false);
         } else {
+            this._state = this._nextState;
             this._state.getNext(this);
+            this.startProgressAnimation(slideNr, true);
         }
     }
 
     update_data() {
-        updateSlideData(this._state.constructor.name);
+        updateSlideData(this._nextState.constructor.name);
     }
 
-    interrupt(interruptingState) {
-        this._oldState = this._state;
-        this._state = interruptingState;
-        this._state.next = this._oldState;
+    async interrupt(interruptingState) {
+        this.resetProgressAnimation(slidesOrdered.indexOf(this._state));
+        this._nextState = interruptingState;
+        this._nextState.next = this._state;
+        // Allow the current loading bar to be reset, before we continue execution and start drawing the slide
+        await new Promise(r => setTimeout(r, 10));
         this.run()
+    }
+
+    startProgressAnimation(index, doTransition = true) {
+        if (index < 0) { return }
+
+        const child = carouselProgressBar.children[index].children[0].children[0];
+        if (doTransition) { child.style.transition = `width ${slideTime / 1000 + 0.5}s linear`; }
+        child.style.width = '100%';
+    }
+
+    resetProgressAnimation(index) {
+        for (let i in [0, 1]) {
+            let length = carouselProgressBar.children.length
+            let slideNr = (index - i);
+            slideNr = (slideNr + length) % length;
+            let child = carouselProgressBar.children[slideNr].children[0].children[0];
+            child.style.transition = `width 0s`;
+            child.style.width = '0';
+        }
+    }
+
+    resetProgressColors() {
+        const children = carouselProgressBar.children;
+        for (let i = 0; i < children.length; i++) {
+            children[i].children[0].children[0].style.transition = ``
+            children[i].children[0].children[0].style.width = '0'
+        }
     }
 }
 
@@ -74,7 +123,7 @@ class Slide {
     }
 
     getNext(carousel) {
-        carousel.state = this._next
+        carousel.nextState = this._next
     }
 
     set data(data) {
@@ -670,7 +719,9 @@ function borderColors(length) {
  */
 
 let carousel;
+let carouselProgressBar;
 let slides = {};
+let slidesOrdered = [];
 let contentBox;
 
 function initCarousel() {
@@ -712,10 +763,30 @@ function initCarousel() {
     slides.Title.next = slides.TopBalance;
     slides.TopBalance.next = slides.PriceList;
 
+    // The first slide is the first slide in the ordering
+    slidesOrdered[0] = slides[firstSlide];
+    // For all remaining slides..
+    for (let i = 0; i < Object.keys(slides).length - 2; i++) {
+        // The next slide in the ordered list is the result of the pointer to the next of the current slide
+        slidesOrdered[i + 1] = slides[slidesOrdered[i].next.constructor.name]
+    }
 
-    carousel = new Carousel();
-    carousel.state = slides.Quote;
-    return carousel.state.constructor.name
+    // Initialize the loading bars on the top of the slide window
+    carouselProgressBar = document.getElementById('carousel-progress-bar');
+    const progressBarWidth = (100 / slidesOrdered.length);
+    for (let i = 0; i < slidesOrdered.length; i++) {
+        console.log('added bar')
+        carouselProgressBar.innerHTML += `
+                <div class="slide-progress-bar-outer box-sizing" style="width: ${progressBarWidth}%">
+                    <div class="slide-progress-bar-inner box-sizing">
+                        <div class="slide-progress-bar-animation box-sizing"></div>
+                    </div>
+                </div>`
+    }
+
+    carousel = new Carousel(slides[firstSlide]);
+    //carousel.nextState = slides[firstSlide];
+    return firstSlide;
 }
 
 let carouselLoop;
@@ -745,3 +816,25 @@ function interruptCarousel(interruptingState) {
     carousel.interrupt(interruptingState);
     carouselLoop = setTimeout(runCarouselObj, slideTime);
 }
+
+/*function startProgressAnimation(index, doTransition = true) {
+    if (index < 0) { return }
+
+    const child = carouselProgressBar.children[index].children[0].children[0];
+    if (doTransition) { child.style.transition = `width ${slideTime / 1000 + 0.5}s linear`; }
+    child.style.width = '100%';
+}
+
+function resetProgressAnimation(index) {
+    const child = carouselProgressBar.children[index].children[0].children[0];
+    child.style.transition = `width 0s`;
+    child.style.width = '0';
+}
+
+function resetProgressColors() {
+    const children = carouselProgressBar.children
+    for (let i = 0; i < children.length; i++) {
+        children[i].children[0].children[0].style.transition = ``
+        children[i].children[0].children[0].style.width = '0'
+    }
+}*/
