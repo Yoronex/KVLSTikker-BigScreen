@@ -1,4 +1,5 @@
-const slideTime = 5000; // ms
+const slideTime = 20000; // ms
+// The first slide should always be drawable! If this is not the case, BigScreen will not load.
 const firstSlide = "PriceList";
 
 /**
@@ -24,7 +25,6 @@ class Carousel {
             this._nextState.getNext(this);
             this.update_data();
             this.run();
-            //this.startProgressAnimation(this._nextState, false);
         } else {
             this.startProgressAnimation(this._nextState, this._state, true);
             this._nextState.draw();
@@ -73,9 +73,6 @@ class Carousel {
     }
 
     resetProgressAnimation(index) {
-        //let length = carouselProgressBar.children.length
-        //let slideNr = (index);
-        // slideNr = (slideNr + length) % length;
         let child = carouselProgressBar.children[index].children[0].children[0];
         child.style.transition = `transform 0s`;
         child.style.transform = 'translateX(-100%)';
@@ -818,10 +815,6 @@ function initCarousel() {
 
     slidesInterrupt = [slides.Message.constructor.name];
 
-    /*slides.drankTonight.data = {
-        "labels": ['Bier', 'Apfelkorn', 'Cola'],
-        "data": [10, 4, 7]};*/
-
     slides.PriceList.next = slides.DrinkingScore;
     slides.DrinkingScore.next = slides.DrankTonight
     slides.DrankTonight.next = slides.Calendar;
@@ -931,25 +924,3 @@ function addProgressBar(nextSlide, currentSlide = null) {
         carouselProgressBar.children[i].style.width = width + "%"
     }
 }
-
-/*function startProgressAnimation(index, doTransition = true) {
-    if (index < 0) { return }
-
-    const child = carouselProgressBar.children[index].children[0].children[0];
-    if (doTransition) { child.style.transition = `width ${slideTime / 1000 + 0.5}s linear`; }
-    child.style.width = '100%';
-}
-
-function resetProgressAnimation(index) {
-    const child = carouselProgressBar.children[index].children[0].children[0];
-    child.style.transition = `width 0s`;
-    child.style.width = '0';
-}
-
-function resetProgressColors() {
-    const children = carouselProgressBar.children
-    for (let i = 0; i < children.length; i++) {
-        children[i].children[0].children[0].style.transition = ``
-        children[i].children[0].children[0].style.width = '0'
-    }
-}*/

@@ -126,7 +126,6 @@ socket.on('transaction', function(msg) {
 });
 
 socket.on('slide_data', function(msg) {
-    //console.log(msg);
     slides[msg.name].data = msg.data
 });
 
@@ -137,7 +136,6 @@ socket.on('slide_interrupt', function(msg) {
 });
 
 socket.on('init', function(msg) {
-    //console.log(msg);
     console.log("received init response");
     clearTimeout(errorTimeout);
     if (msg.snow === false) {
