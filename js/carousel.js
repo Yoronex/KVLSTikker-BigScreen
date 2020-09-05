@@ -11,10 +11,6 @@ class Carousel {
         this._state = state;
     }
 
-    /*set state(state) {
-        this._state = state
-    }*/
-
     set nextState(state) {
         this._nextState = state
     }
@@ -24,26 +20,16 @@ class Carousel {
     }
 
     run() {
-        let slideNr = slidesOrdered.indexOf(this._nextState);
-        // If the slide number is -1, the slide is not in the list and thus it must be an interrupt
-        // We therefore get the number of the current slide
-        if (slideNr === -1) {
-            slideNr = (slidesOrdered.indexOf(this._state) - 1 + slidesOrdered.length) % slidesOrdered.length;
-        }
-        // If this slide is first in the sequence, we have to reset all the progress bars in the carousel
-        if (slideNr === 0) {
-            this.resetProgressColors();
-        }
-
-        if (!this._nextState.draw()) {
+        if (!this._nextState.drawable()) {
             this._nextState.getNext(this);
             this.update_data();
             this.run();
-            this.startProgressAnimation(slideNr, false);
+            //this.startProgressAnimation(this._nextState, false);
         } else {
+            this.startProgressAnimation(this._nextState, this._state, true);
+            this._nextState.draw();
             this._state = this._nextState;
             this._state.getNext(this);
-            this.startProgressAnimation(slideNr, true);
         }
     }
 
@@ -60,30 +46,46 @@ class Carousel {
         this.run()
     }
 
-    startProgressAnimation(index, doTransition = true) {
-        if (index < 0) { return }
+    async startProgressAnimation(slide, oldSlide, doTransition = true) {
+        if (slidesInterrupt.includes(slide.constructor.name)) {
+            return;
+        }
 
-        const child = carouselProgressBar.children[index].children[0].children[0];
-        if (doTransition) { child.style.transition = `width ${slideTime / 1000 + 0.5}s linear`; }
-        child.style.width = '100%';
+        let slideNr = slidesOrdered.indexOf(slide);
+        // If the slide number is -1, the slide is not in the list and thus it must be an interrupt
+        // We therefore get the number of the current slide
+        if (slideNr === -1) {
+            //slideNr = (slidesOrdered.indexOf(this._state) - 1 + slidesOrdered.length) % slidesOrdered.length;
+            await addProgressBar(slide, oldSlide);
+            slideNr = slidesOrdered.indexOf(slide);
+        }
+        // If this slide is first in the sequence, we have to reset all the progress bars in the carousel
+        if (slideNr === 0) {
+            await this.resetProgressColors();
+        }
+
+        if (slideNr < 0) { return }
+
+        const child = carouselProgressBar.children[slideNr].children[0].children[0];
+        if (doTransition) { child.style.transition = `transform ${slideTime / 1000 + 0.5}s linear`; }
+        await sleep(10);
+        child.style.transform = 'translateX(0)';
     }
 
     resetProgressAnimation(index) {
-        for (let i in [0, 1]) {
-            let length = carouselProgressBar.children.length
-            let slideNr = (index - i);
-            slideNr = (slideNr + length) % length;
-            let child = carouselProgressBar.children[slideNr].children[0].children[0];
-            child.style.transition = `width 0s`;
-            child.style.width = '0';
-        }
+        //let length = carouselProgressBar.children.length
+        //let slideNr = (index);
+        // slideNr = (slideNr + length) % length;
+        let child = carouselProgressBar.children[index].children[0].children[0];
+        child.style.transition = `transform 0s`;
+        child.style.transform = 'translateX(-100%)';
     }
 
-    resetProgressColors() {
+    async resetProgressColors() {
         const children = carouselProgressBar.children;
         for (let i = 0; i < children.length; i++) {
-            children[i].children[0].children[0].style.transition = ``
-            children[i].children[0].children[0].style.width = '0'
+            children[i].children[0].children[0].style.transition = 'transform 0s';
+            children[i].children[0].children[0].style.transform = 'translateX(-100%)';
         }
     }
 }
@@ -144,8 +146,13 @@ class DrankTonight extends Slide {
         this._data = {"labels": [], "values": []}
     }
 
+    drawable() {
+        return this._data.values.length !== 0;
+
+    }
+
     draw() {
-        if (this._data.values.length === 0) {
+        if (!this.drawable()) {
             return false;
         }
         this.contentBox.innerHTML = this.html;
@@ -194,8 +201,12 @@ class MostDrank1 extends Slide {
         this._data = {"labels": [], "values": [], "product_name": ""}
     }
 
+    drawable() {
+        return this._data.values.length !== 0;
+    }
+
     draw() {
-        if (this._data.values.length === 0) {
+        if (!this.drawable()) {
             return false;
         }
         const name = this._data.product_name;
@@ -245,8 +256,12 @@ class MostDrank2 extends Slide {
         this._data = {"labels": [], "values": [], "product_name": ""}
     }
 
+    drawable() {
+        return this._data.values.length !== 0;
+    }
+
     draw() {
-        if (this._data.values.length === 0) {
+        if (!this.drawable()) {
             return false;
         }
         const name = this._data.product_name;
@@ -296,8 +311,12 @@ class MostDrank3 extends Slide {
         this._data = {"labels": [], "values": [], "product_name": ""}
     }
 
+    drawable() {
+        return this._data.values.length !== 0;
+    }
+
     draw() {
-        if (this._data.values.length === 0) {
+        if (!this.drawable()) {
             return false;
         }
         const name = this._data.product_name;
@@ -351,8 +370,16 @@ class DrinkingScore extends Slide {
         this._data = null;
     }
 
+    calcPercentage() {
+        return 100 - parseFloat(document.getElementById('score-bar-inner').style.top)
+    }
+
+    drawable() {
+        return this.calcPercentage() > 0;
+    }
+
     draw() {
-        const percentage = 100 - parseFloat(document.getElementById('score-bar-inner').style.top)
+        const percentage = this.calcPercentage();
         let message = ""
         if (percentage === 0) {
             return false
@@ -381,6 +408,10 @@ class PriceList extends Slide {
     constructor() {
         super(arguments);
         this._data = {"names": [], "prices": []}
+    }
+
+    drawable() {
+        return true;
     }
 
     draw() {
@@ -434,6 +465,10 @@ class Quote extends Slide {
         this._data = "";
     }
 
+    drawable() {
+        return true;
+    }
+
     draw() {
         const quote = this._data;
         this.contentBox.innerHTML = `<div id="quote" style="font-size: 30px; height: 100%; padding: 30px"><table style="width: 100%; height: 100%"><tr><td style="vertical-align: center; font-size: 40px"><i>${quote}</i></td></tr></table></div>`;
@@ -450,6 +485,10 @@ class Debt extends Slide {
     constructor() {
         super(arguments);
         this._data = {'names': [], 'amount': []}
+    }
+
+    drawable() {
+        return true;
     }
 
     draw() {
@@ -481,6 +520,10 @@ class TopBalance extends Slide {
         this._data = {'names': [], 'amount': []}
     }
 
+    drawable() {
+        return true;
+    }
+
     draw() {
         let table = "";
         for (let i = 0; i < Math.min(10, this._data.names.length); i++) {
@@ -510,7 +553,15 @@ class Balance extends Slide {
         this._data = {"names": [], "amount": [], "unparsed": []}
     }
 
+    drawable() {
+        return this._data.names.length !== 0;
+    }
+
     draw() {
+        if (!this.drawable()) {
+            return false;
+        }
+
         this.contentBox.innerHTML = `<div class="pricelist" id="balancetable"></div>`;
         const height = document.getElementById("balancetable").offsetHeight;
         let products = this._data.names.length;
@@ -569,6 +620,10 @@ class Message extends Slide {
         this._data = ""
     }
 
+    drawable() {
+        return true;
+    }
+
     draw() {
         const quote = this._data;
         this.contentBox.innerHTML = `<div id="quote" style="font-size: 30px; height: 100%"><table style="width: 100%; height: 100%"><tr><td style="vertical-align: center; font-size: 40px">${quote}</td></tr></table></div>`;
@@ -580,6 +635,10 @@ class Title extends Slide {
     constructor() {
         super(arguments);
         this._data = {'beer': "", 'flugel': ""}
+    }
+
+    drawable() {
+        return true;
     }
 
     draw() {
@@ -606,8 +665,12 @@ class RecentlyPlayed extends Slide {
         this._data = [];
     }
 
+    drawable() {
+        return this._data.length !== 0;
+    }
+
     draw() {
-        if (this._data.length === 0) {
+        if (!this.drawable()) {
             return false;
         }
         const pre = `<h1>Recent afgespeelde nummers</h1></h1><table style="width: 100%;">`;
@@ -629,6 +692,10 @@ class Calendar extends Slide {
     constructor() {
         super(arguments);
         this._data = {'upcoming_events': false};
+    }
+
+    drawable() {
+        return true;
     }
 
     draw() {
@@ -661,6 +728,10 @@ class Birthdays extends Slide {
     constructor() {
         super(arguments);
         this._data = [];
+    }
+
+    drawable() {
+        return true;
     }
 
     draw() {
@@ -722,6 +793,7 @@ let carousel;
 let carouselProgressBar;
 let slides = {};
 let slidesOrdered = [];
+let slidesInterrupt = [];
 let contentBox;
 
 function initCarousel() {
@@ -744,6 +816,8 @@ function initCarousel() {
 
     slides.Message = new Message(contentBox, "Bericht", '');
 
+    slidesInterrupt = [slides.Message.constructor.name];
+
     /*slides.drankTonight.data = {
         "labels": ['Bier', 'Apfelkorn', 'Cola'],
         "data": [10, 4, 7]};*/
@@ -763,30 +837,41 @@ function initCarousel() {
     slides.Title.next = slides.TopBalance;
     slides.TopBalance.next = slides.PriceList;
 
-    // The first slide is the first slide in the ordering
-    slidesOrdered[0] = slides[firstSlide];
-    // For all remaining slides..
-    for (let i = 0; i < Object.keys(slides).length - 2; i++) {
-        // The next slide in the ordered list is the result of the pointer to the next of the current slide
-        slidesOrdered[i + 1] = slides[slidesOrdered[i].next.constructor.name]
-    }
-
-    // Initialize the loading bars on the top of the slide window
-    carouselProgressBar = document.getElementById('carousel-progress-bar');
-    const progressBarWidth = (100 / slidesOrdered.length);
-    for (let i = 0; i < slidesOrdered.length; i++) {
-        console.log('added bar')
-        carouselProgressBar.innerHTML += `
-                <div class="slide-progress-bar-outer box-sizing" style="width: ${progressBarWidth}%">
-                    <div class="slide-progress-bar-inner box-sizing">
-                        <div class="slide-progress-bar-animation box-sizing"></div>
-                    </div>
-                </div>`
-    }
+    initCarouselProgressBar();
 
     carousel = new Carousel(slides[firstSlide]);
     //carousel.nextState = slides[firstSlide];
     return firstSlide;
+}
+
+function initCarouselProgressBar() {
+    // The first slide is the first slide in the ordering
+    addProgressBar(slides[firstSlide]);
+
+    // Check precondition
+    if (!slidesOrdered[0].drawable()) {
+        throw `The slide ${firstSlide} is not drawable by default. Please choose a different first slide.`
+    }
+
+    // Save the current and the next slide...
+    let currentSlide = slidesOrdered[0];
+    let nextSlide = slidesOrdered[0].next;
+    // Loop until we see the first slide again, e.g. loop over all slides in the loop
+    while (nextSlide.constructor.name !== firstSlide) {
+        // If we can draw this slide...
+        if (nextSlide.drawable()) {
+            // Create a progress bar for it
+            addProgressBar(nextSlide, currentSlide);
+            // Change the current slide
+            currentSlide = nextSlide;
+            // Go to the next slide in the ordering
+            nextSlide = currentSlide.next;
+        // If we cannot draw this slide...
+        } else {
+            // Go to the next slide in the ordering
+            nextSlide = nextSlide.next;
+        }
+    }
 }
 
 let carouselLoop;
@@ -815,6 +900,36 @@ function interruptCarousel(interruptingState) {
     clearTimeout(carouselLoop);
     carousel.interrupt(interruptingState);
     carouselLoop = setTimeout(runCarouselObj, slideTime);
+}
+
+// Add a progress bar for the next slide, given the current slide
+function addProgressBar(nextSlide, currentSlide = null) {
+    // If no current slide is given, the new slide is simply appended to the end
+    if (currentSlide === null) {
+        slidesOrdered.push(nextSlide);
+    } else {
+        const slideNr = slidesOrdered.indexOf(currentSlide);
+        slidesOrdered.splice(slideNr + 1, 0, nextSlide);
+    }
+
+    // Add the HTML code of a progress bar to the end of the current block
+    carouselProgressBar = document.getElementById('carousel-progress-bar');
+    carouselProgressBar.innerHTML += `
+                <div class="slide-progress-bar-outer box-sizing" style="width: 0">
+                    <div class="slide-progress-bar-inner box-sizing">
+                        <div class="slide-progress-bar-animation box-sizing" style="transition: transform ${slideTime / 1000 + 0.5}s linear"></div>
+                    </div>
+                </div>`
+
+    // Get the amount of progress bars
+    const length = carouselProgressBar.children.length;
+    // Calculate the width of each bar in percentages
+    const width = 100 / length;
+
+    // Set this new width for every bar
+    for (let i = 0; i < length; i++) {
+        carouselProgressBar.children[i].style.width = width + "%"
+    }
 }
 
 /*function startProgressAnimation(index, doTransition = true) {
