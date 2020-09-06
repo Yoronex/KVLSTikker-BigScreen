@@ -425,6 +425,34 @@ img {
     -webkit-transition-timing-function: ease;
 }
 
+@keyframes move-quote-left {
+    from {
+        transform: translateX(10%)
+    }
+    to {
+        transform: translateX(-10%)
+    }
+}
+
+@keyframes move-quote-right {
+    from {
+        transform: translateX(-10%)
+    }
+    to {
+        transform: translateX(10%)
+    }
+}
+
+.quote-content {
+    animation: move-quote-right 21s linear 1;
+    padding: 0 10%;
+}
+
+.quote-author {
+    animation: move-quote-left 21s linear 1;
+    padding: 0 10%;
+}
+
 .tikker-offline {
     color: red;
     font-size: 30px;

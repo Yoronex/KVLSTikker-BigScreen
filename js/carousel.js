@@ -459,7 +459,7 @@ class PriceList extends Slide {
 class Quote extends Slide {
     constructor() {
         super(arguments);
-        this._data = "";
+        this._data = {};
     }
 
     drawable() {
@@ -467,8 +467,18 @@ class Quote extends Slide {
     }
 
     draw() {
-        const quote = this._data;
-        this.contentBox.innerHTML = `<div id="quote" style="font-size: 30px; height: 100%; padding: 30px"><table style="width: 100%; height: 100%"><tr><td style="vertical-align: center; font-size: 40px"><i>${quote}</i></td></tr></table></div>`;
+        const quote = this._data.quote;
+        const author = this._data.author;
+        const date = this._data.date;
+        this.contentBox.innerHTML = `<div id="quote" style="font-size: 30px; height: 100%; padding: 30px; overflow: hidden; box-sizing: border-box;">
+            <table style="width: 100%; height: 100%; box-sizing: border-box; overflow: hidden;">
+                <tr>
+                    <td style="vertical-align: center; font-size: 40px">
+                        <div class="quote-content"><i>"${quote}"</i></div>
+                        <div class="quote-author">~ ${author}, ${date}</div>
+                    </td>
+                </tr>
+            </table></div>`;
         return true
     }
 }
