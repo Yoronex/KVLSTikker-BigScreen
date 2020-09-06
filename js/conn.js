@@ -42,10 +42,6 @@ socket.on('disconnect', function() {
     console.log('Connection with Tikker lost')
 });
 
-socket.on('my response', function(msg) {
-    $('#contentblock').append('<p>Received: ' + msg.data + '</p>');
-});
-
 socket.on('spotify update', function(msg) {
     updateSpotify(msg);
 });
@@ -126,13 +122,12 @@ socket.on('transaction', function(msg) {
 });
 
 socket.on('slide_data', function(msg) {
+    console.log(msg);
     slides[msg.name].data = msg.data
 });
 
 socket.on('slide_interrupt', function(msg) {
-    msg = msg.message;
-    slides[msg.name].data = msg.data;
-    interruptCarousel(slides[msg.name])
+    interruptCarousel(msg.message)
 });
 
 socket.on('init', function(msg) {
@@ -214,6 +209,7 @@ function initFromTikker(slideName) {
 
 function updateSlideData(name) {
     socket.emit('slide_data', {"name": name})
+    console.log("send update for slide " + name)
 }
 
 function spotify_send_update() {

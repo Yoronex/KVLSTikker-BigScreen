@@ -415,7 +415,7 @@ img {
 .content {
     width: 1276px;
     height: 640px;
-    margin-top: -12px;
+    transform: translateY(-12px);
     font-size: 32px;
     text-align: center;
     overflow: hidden;

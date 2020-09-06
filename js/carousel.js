@@ -889,7 +889,13 @@ function showContentBox() {
     contentBox.style.opacity = '1'
 }
 
-function interruptCarousel(interruptingState) {
+function interruptCarousel(interruptObj) {
+    let interruptingState;
+    if (interruptObj.name === "Message") {
+        interruptingState = new Message(contentBox, "Bericht", '');
+        interruptingState.data = interruptObj.data;
+    }
+
     clearTimeout(carouselLoop);
     carousel.interrupt(interruptingState);
     carouselLoop = setTimeout(runCarouselObj, slideTime);
