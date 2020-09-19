@@ -132,7 +132,7 @@ function spotifyprogress() {
             progessbar.style.animationTimingFunction = "";
             progessbar.style.animationDelay = "";
 
-            progessbar.style.animation = "track-progress-bar-anim "+ currentSpotifyTrackLength +"ms;";
+            progessbar.style.animation = "track-progress-bar-anim " + currentSpotifyTrackLength + "ms;";
             progessbar.style.animationTimingFunction = "linear";
             progessbar.style.animationDelay = "-" + currentSpotifyTrackProgressCalced + "ms";
         }
@@ -150,7 +150,7 @@ function spotifyprogress() {
 let backgroundSwitch;
 let busy = false;
 
-function updateCover(cover, backgroundCover=null) {
+function updateCover(cover, backgroundCover = null) {
     let front_background = document.getElementById('global-background-top');
     let back_background = document.getElementById('global-background-back');
     let front_cover = document.getElementById('album-cover-top');
@@ -231,113 +231,30 @@ function hideVideoBackground() {
     document.getElementById('background-darken-filter').style.opacity = '0.5'
 }
 
-(function($) {
-    $.fn.textWidth = function(){
-        /*var text = $(this).text();
-        var makeuptext = "This is a test for the marquee";
-        var calc = '<span style="display:none">' + makeuptext + '</span>';
-        $('.measure-text-width').append(calc);
-        var width = $('.measure-text-width').find('span:last').width();
-        $('.measure-text-width').find('span:last').remove();
-        console.log("width: " + width);
-        return width;*/
-        var calc = '<span class="marq" style="display:none">' + $(this).text() + '</span>';
-        $('body').append(calc);
-        var width = $('body').find('span:last').width();
-        $('body').find('span:last').remove();
-        return width;
-    };
-
-    $.fn.marquee = function(args) {
-        var that = $(this);
-        var textWidth = that.textWidth(),
-            offset = that.width(),
-            width = offset,
-            css = {
-                'text-indent' : that.css('text-indent'),
-                'overflow' : that.css('overflow'),
-                'white-space' : that.css('white-space')
-            },
-            marqueeCss = {
-                'text-indent' : width,
-                'overflow' : 'hidden',
-                'white-space' : 'nowrap'
-            },
-            args = $.extend(true, { count: -1, speed: 1e1, leftToRight: false }, args),
-            i = 0,
-            stop = textWidth*-1,
-            dfd = $.Deferred();
-
-        function go() {
-            if(!that.length) return dfd.reject();
-            if(width <= stop) {
-                i++;
-                if(i === args.count) {
-                    that.css(css);
-                    return dfd.resolve();
-                }
-                if(args.leftToRight) {
-                    width = textWidth*-1;
-                } else {
-                    width = offset;
-                }
-            }
-            that.css('text-indent', width + 'px');
-            if(args.leftToRight) {
-                width++;
-            } else {
-                width--;
-            }
-            setTimeout(go, args.speed);
-        };
-        if(args.leftToRight) {
-            width = textWidth*-1;
-            width++;
-            stop = offset;
-        } else {
-            width--;
-        }
-        that.css(marqueeCss);
-        go();
-        return dfd.promise();
-    };
-})(jQuery);
-
-function startMarquee() {
-    $('.marq').marquee({ count: 1, speed: 2 }).done(function() { $('h5').css('color', '#f00'); })
-}
-
 let queue = [];
 let marqueeWorking = false;
 
 function queueMarquee(message) {
     queue.push(message);
     if (marqueeWorking === false) {
-        popQueueMarquee()
+        popQueueMarquee();
     }
-}
-
-let string = "";
-
-function testMarquee() {
-    //document.getElementById("marquee").innerHTML = `<p class='marq'>1x Bier voor Roy, Reindert, Hans, Bart</p>`;
-    //$('.marq').marquee({ count: 1, speed: 1 }).done(function() { document.getElementById("marquee").innerHTML = "" })
-    queueMarquee("Biertje erbij? " + string);
-    string = string + "aaaaaa"
 }
 
 function popQueueMarquee() {
     marqueeWorking = true;
     let message = queue.shift();
-    document.getElementById("marquee").innerHTML = `<p class='marq'>${message}</p>`;
-    $('.marq').marquee({ count: 1, speed: 1 }).done(function() {
-        document.getElementById("marquee").innerHTML = "";
+    let marq = document.getElementById('marquee');
+    marq.innerHTML = ""
+    marq.innerHTML = `<span class='marquee'>${message}</span>`
+
+    setTimeout(function() {
         if (queue.length > 0) {
-            popQueueMarquee()
+            popQueueMarquee();
         } else {
             marqueeWorking = false;
         }
-    });
+    }, 21000)
 }
 
 function updateDailyStats(daily, max) {

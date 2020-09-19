@@ -353,19 +353,30 @@ img {
     margin-top: 100px;
 }
 
-
-
 .last-tikked {
     float: left;
-    margin: 10px 30px;
+    margin: 18px 30px;
+    padding-top: 24px;
     width: 1100px;
     height: 4rem;
     font-size: 28px;
+    white-space: nowrap;
+    overflow: hidden;
+    box-sizing: border-box;
     /*box-shadow: 12px 0 15px -4px rgba(255, 255, 255, 0.8), -12px 0 8px -4px rgba(255, 255, 255, 0.8);*/
 }
 
-.marq {
+.marquee {
     font-size: 28px;
+    display: inline-block;
+    padding-left: 100%;
+    will-change: transform;
+    animation: marquee 20s linear 1;
+}
+
+@keyframes marquee {
+    0%   { transform: translateX(0) }
+    100% { transform: translateX(-100%) }
 }
 
 .clock {
